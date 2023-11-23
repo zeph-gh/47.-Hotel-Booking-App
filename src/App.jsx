@@ -1,5 +1,62 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
+import { Provider } from "react-redux";
+import store from "./store";
+import { AuthProvider } from "./components/AuthProvider";
+import TopBottonBar from "./components/TopBottonBar";
+import ErrorPage from "./pages/ErrorPage";
+import HomePage from "./pages/HomePage";
+import RequireAuth from "./components/RequireAuth";
+import RoomPage from "./pages/RoomPage";
+import BookingPage from "./pages/BookingPage";
+import TripPage from "./pages/TripPage";
+import AdminPage from "./pages/AdminPage";
+import RequireAdminAuth from "./components/RequireAdminAuth";
+import "./App.css";
 
 export default function App() {
-  return <AuthPage />;
+  return (
+    <AuthProvider>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<TopBottonBar />}>
+              <Route index element={<HomePage />} />
+              <Route path="/login" element={<AuthPage />} />
+              <Route path="*" element={<ErrorPage />} />
+
+              <Route path="/room/:room_id" element={<RoomPage />} />
+
+              <Route
+                path="/booking/:room_id"
+                element={
+                  <RequireAuth>
+                    <BookingPage />
+                  </RequireAuth>
+                }
+              />
+
+              <Route
+                path="/trips"
+                element={
+                  <RequireAuth>
+                    <TripPage />
+                  </RequireAuth>
+                }
+              />
+
+              <Route
+                path="/admin"
+                element={
+                  <RequireAdminAuth>
+                    <AdminPage />
+                  </RequireAdminAuth>
+                }
+              />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </Provider>
+    </AuthProvider>
+  );
 }

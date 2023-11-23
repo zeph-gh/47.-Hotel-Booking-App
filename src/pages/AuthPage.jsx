@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../components/AuthProvider";
 import {
@@ -14,7 +14,6 @@ import {
 } from "firebase/auth";
 
 export default function AuthPage() {
-  const loginImage = "https://sig1.co/img-twitter-1";
   const [modalShow, setModalShow] = useState(null);
   const handleShowSignUp = () => setModalShow("SignUp");
   const handleShowLogin = () => setModalShow("Login");
@@ -30,7 +29,7 @@ export default function AuthPage() {
 
   useEffect(() => {
     if (currentUser) {
-      navigate("/profile");
+      navigate("/");
     }
   }, [currentUser, navigate]);
 
@@ -158,55 +157,39 @@ export default function AuthPage() {
 
   return (
     <Row>
-      <Col sm={6}>
-        <Image src={loginImage} fluid />
-      </Col>
-      <Col sm={6} className="p-4">
-        <i
-          className="bi bi-twitter"
-          style={{ fontSize: 50, color: "dodgerblue" }}
-        ></i>
-        <p className="mt-5" style={{ fontSize: 64 }}>
-          Happening Now
+      <Col sm={5} className="d-grid gap-2">
+        <Button
+          className="rounded-pill"
+          variant="outline-dark"
+          onClick={handleSignInGoogle}
+        >
+          <i className="bi bi-google"></i> Sign up with Google
+        </Button>
+        <Button
+          className="rounded-pill"
+          variant="outline-dark"
+          onClick={handleSignInFacebook}
+        >
+          <i className="bi bi-facebook"></i> Sign up with Facebook
+        </Button>
+        <p style={{ textAlign: "center" }}>or</p>
+        <Button className="rounded-pill" onClick={handleShowSignUp}>
+          Create an account
+        </Button>
+        <p style={{ fontSize: "12px" }}>
+          By signing up, you agree to the Terms of Service and Privacy Policy
+          including Cookie Use.
         </p>
-        <h2 className="mt-5" style={{ fontSize: 31 }}>
-          Join Twitter Today.
-        </h2>
-
-        <Col sm={5} className="d-grid gap-2">
-          <Button
-            className="rounded-pill"
-            variant="outline-dark"
-            onClick={handleSignInGoogle}
-          >
-            <i className="bi bi-google"></i> Sign up with Google
-          </Button>
-          <Button
-            className="rounded-pill"
-            variant="outline-dark"
-            onClick={handleSignInFacebook}
-          >
-            <i className="bi bi-facebook"></i> Sign up with Facebook
-          </Button>
-          <p style={{ textAlign: "center" }}>or</p>
-          <Button className="rounded-pill" onClick={handleShowSignUp}>
-            Create an account
-          </Button>
-          <p style={{ fontSize: "12px" }}>
-            By signing up, you agree to the Terms of Service and Privacy Policy
-            including Cookie Use.
-          </p>
-          <p className="mt-5" style={{ fontWeight: "bold" }}>
-            Already have an account?
-          </p>
-          <Button
-            className="rounded-pill"
-            variant="outline-primary"
-            onClick={handleShowLogin}
-          >
-            Sign In
-          </Button>
-        </Col>
+        <p className="mt-5" style={{ fontWeight: "bold" }}>
+          Already have an account?
+        </p>
+        <Button
+          className="rounded-pill"
+          variant="outline-primary"
+          onClick={handleShowLogin}
+        >
+          Sign In
+        </Button>
       </Col>
 
       <Modal show={modalShow} onHide={handleClose} animation={false} centered>
@@ -264,7 +247,7 @@ export default function AuthPage() {
                 </Form.Group>
                 <p className="my-2" style={{ fontSize: "12px" }}>
                   {modalShow === "SignUp"
-                    ? "By signing up, you agree to the Terms of Service and Privacy Policy, including Cookie Use. SigmaTweets may use your contact information, including your email address and phone number for purposes outlined in our Privacy Policy, like keeping your account seceure and personalising our services, including ads. Learn more. Others will be able to find you by email or phone number, when provided, unless you choose otherwise here."
+                    ? "By signing up, you agree to the Terms of Service and Privacy Policy, including Cookie Use. Zephbnb may use your contact information, including your email address and phone number for purposes outlined in our Privacy Policy, like keeping your account seceure and personalising our services, including ads. Learn more. Others will be able to find you by email or phone number, when provided, unless you choose otherwise here."
                     : ""}
                 </p>
 
