@@ -50,6 +50,7 @@ export default function BookingPage() {
 
     if (response.ok) {
       alert("Booking confirmed!");
+
       // Send email
       const emailResponse = await fetch(
         "https://booking-system-api-zeph-goh.sigma-school-full-stack.repl.co/send-email",
