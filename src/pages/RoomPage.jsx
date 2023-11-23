@@ -60,7 +60,8 @@ export default function RoomPage() {
       const diffDays = Math.round(
         Math.abs((checkInDate - checkOutDate) / oneDay)
       );
-      return diffDays * room.price;
+      const totalPrice = diffDays * room.price;
+      return Number(totalPrice.toFixed(2));
     }
     return 0;
   };
