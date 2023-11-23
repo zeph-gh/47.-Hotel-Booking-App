@@ -181,6 +181,7 @@ export default function RoomPage() {
                   <Form.Label>Check-in</Form.Label>
                   <Form.Control
                     type="date"
+                    min={new Date().toISOString().split("T")[0]} // let users pick from today to future only
                     onChange={handleCheckInDateChange}
                   />
                 </Form.Group>
@@ -189,6 +190,7 @@ export default function RoomPage() {
                   <Form.Label>Check-out</Form.Label>
                   <Form.Control
                     type="date"
+                    min={new Date().toISOString().split("T")[0]}
                     onChange={handleCheckOutDateChange}
                   />
                 </Form.Group>
