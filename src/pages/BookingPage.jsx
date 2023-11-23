@@ -1,14 +1,14 @@
 import { useContext, useState } from "react";
 import { Button, Col, Container, Image, Row, Spinner } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
-import { AuthContext } from "../components/AuthProvider"; // Import your Auth context
+import { AuthContext } from "../components/AuthProvider";
 
 export default function BookingPage() {
   const location = useLocation();
   const { room_id, totalPrice, diffDays, checkInDate, checkOutDate, guests } =
     location.state;
 
-  const { currentUser } = useContext(AuthContext); // Get the current user from your Auth context
+  const { currentUser } = useContext(AuthContext);
 
   const [description, setDescription] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -50,6 +50,25 @@ export default function BookingPage() {
 
     if (response.ok) {
       alert("Booking confirmed!");
+      // Send email
+      const emailResponse = await fetch(
+        "https://booking-system-api-zeph-goh.sigma-school-full-stack.repl.co/send-email",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            to: currentUser.email,
+            subject: "Booking Confirmation",
+            text: "Thank you for your booking! We will remind you 1 day before your trip.",
+          }),
+        }
+      );
+
+      if (emailResponse.ok) {
+        console.log("Email sent successfully");
+      } else {
+        console.log("Failed to send email");
+      }
     } else {
       alert("Failed to confirm booking.");
     }
