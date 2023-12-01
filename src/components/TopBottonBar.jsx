@@ -59,19 +59,26 @@ export default function TopBottonBar() {
             ) : (
               ""
             )}
+
+            <Nav.Link as={Link} to="/hostReg">
+              Become a Host
+            </Nav.Link>
+
             {isLoggedIn ? (
               <>
                 {currentUser.uid === "j2NA6g3BLgZlLt63kubtbEWSM4g2" &&
-                location.pathname !== "/admin" ? (
+                location.pathname !== "/admin" ? ( // no admin page button when /admin
                   <Nav.Link as={Link} to="/admin">
                     Admin Page
                   </Nav.Link>
                 ) : null}
-                {location.pathname !== "/trips" ? (
+
+                {location.pathname !== "/trips" ? ( // no my trips button when /trips
                   <Nav.Link as={Link} to="/trips">
                     My Trips
                   </Nav.Link>
                 ) : null}
+
                 <Nav.Link onClick={handleLogout}>Sign Out</Nav.Link>
               </>
             ) : (
