@@ -1,25 +1,17 @@
-import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import RoomPostCard from "./RoomPostCard";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchRooms } from "../features/bookings/bookingsSlice";
+import { useEffect } from "react";
 
 export default function RoomMidBody() {
-  const [rooms, setRooms] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const url =
-    "https://booking-system-api-zeph-goh.sigma-school-full-stack.repl.co/rooms";
+  const loading = useSelector((state) => state.bookings.loading);
+  const rooms = useSelector((state) => state.bookings.rooms);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        setRooms(data);
-        setLoading(false); // Set loading to false after data is fetched
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        setLoading(false); // Ensure loading is set to false even if there's an error
-      });
-  }, [url]);
+    dispatch(fetchRooms());
+  }, [dispatch]);
 
   return (
     <>

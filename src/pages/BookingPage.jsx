@@ -1,12 +1,19 @@
 import { useContext, useState } from "react";
 import { Button, Col, Container, Image, Row, Spinner } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../components/AuthProvider";
+import { useDispatch } from "react-redux";
+import {
+  confirmBooking,
+  sendConfirmationEmail,
+} from "../features/bookings/bookingsSlice";
 
 export default function BookingPage() {
   const location = useLocation();
   const { room_id, totalPrice, diffDays, checkInDate, checkOutDate, guests } =
     location.state;
+
+  const navigate = useNavigate();
 
   const { currentUser } = useContext(AuthContext);
 
@@ -22,58 +29,45 @@ export default function BookingPage() {
   const formattedCheckInDate = startDate.toLocaleDateString(undefined, options);
   const formattedCheckOutDate = endDate.toLocaleDateString(undefined, options);
 
+  const dispatch = useDispatch();
+
   const handleConfirm = async () => {
     setIsLoading(true);
-    const response = await fetch(
-      "https://booking-system-api-zeph-goh.sigma-school-full-stack.repl.co/bookings",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          room_id: room_id,
-          user_id: currentUser.uid,
-          booking_date: new Date().toISOString(),
-          check_in_date: checkInDate,
-          check_out_date: checkOutDate,
-          status: "confirmed",
-          description: description,
-          phone_number: phoneNumber,
-          guests: guests,
-          total_price: totalPrice,
-          nights: diffDays,
-          email: currentUser.email,
-        }),
-      }
-    );
 
-    if (response.ok) {
+    const bookingData = {
+      room_id: room_id,
+      user_id: currentUser.uid,
+      booking_date: new Date().toISOString(),
+      check_in_date: checkInDate,
+      check_out_date: checkOutDate,
+      status: "confirmed",
+      description: description,
+      phone_number: phoneNumber,
+      guests: guests,
+      total_price: totalPrice,
+      nights: diffDays,
+      email: currentUser.email,
+    };
+
+    try {
+      dispatch(confirmBooking(bookingData));
       alert("Booking confirmed!");
 
-      // Send email
-      const emailResponse = await fetch(
-        "https://booking-system-api-zeph-goh.sigma-school-full-stack.repl.co/send-email",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            to: currentUser.email,
-            subject: "Booking Confirmation",
-            text: "Thank you for your booking! We will remind you 1 day before your trip.",
-          }),
-        }
-      );
+      const emailData = {
+        to: currentUser.email,
+        subject: "Booking Confirmation",
+        text: "Thank you for your booking! We will remind you 1 day before your trip.",
+      };
 
-      if (emailResponse.ok) {
-        console.log("Email sent successfully");
-      } else {
-        console.log("Failed to send email");
-      }
-    } else {
-      alert("Failed to confirm booking.");
+      dispatch(sendConfirmationEmail(emailData));
+      console.log("Email sent successfully");
+    } catch (error) {
+      alert(error.message);
     }
+
     setIsLoading(false);
+
+    navigate("/");
   };
 
   const { room_name, room_type, room_location, room_image } = location.state;

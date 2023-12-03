@@ -10,10 +10,11 @@ import {
   Spinner,
 } from "react-bootstrap";
 import roomImages from "../components/roomImages";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchRoomByRoomId } from "../features/bookings/bookingsSlice";
 
 export default function RoomPage() {
   const { room_id } = useParams(); // get the room id from the URL
-  const [room, setRoom] = useState(null);
 
   const navigate = useNavigate();
 
@@ -24,15 +25,12 @@ export default function RoomPage() {
 
   const [guests, setGuests] = useState(1);
 
+  const dispatch = useDispatch();
+  const room = useSelector((state) => state.bookings.room);
+
   useEffect(() => {
-    // Fetch room details from your API
-    fetch(
-      `https://booking-system-api-zeph-goh.sigma-school-full-stack.repl.co/rooms/${room_id}`
-    )
-      .then((response) => response.json())
-      .then((data) => setRoom(data))
-      .catch((error) => console.error("Error:", error));
-  }, [room_id]);
+    dispatch(fetchRoomByRoomId(room_id));
+  }, [room_id, dispatch]);
 
   if (!room) {
     return (
@@ -102,7 +100,7 @@ export default function RoomPage() {
     setErrorMessage("");
   };
 
-  const images = roomImages[room.room_id];
+  const images = roomImages[room_id];
 
   return (
     <div className="py-4 mx-5 px-5">

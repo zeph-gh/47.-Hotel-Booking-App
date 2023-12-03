@@ -11,48 +11,52 @@ import TripPage from "./pages/TripPage";
 import AdminPage from "./pages/AdminPage";
 import RequireAdminAuth from "./components/RequireAdminAuth";
 import "./App.css";
+import { Provider } from "react-redux";
+import store from "./store";
 
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<TopBottonBar />}>
-            <Route index element={<HomePage />} />
-            <Route path="/login" element={<AuthPage />} />
-            <Route path="*" element={<ErrorPage />} />
+    <Provider store={store}>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<TopBottonBar />}>
+              <Route index element={<HomePage />} />
+              <Route path="/login" element={<AuthPage />} />
+              <Route path="*" element={<ErrorPage />} />
 
-            <Route path="/room/:room_id" element={<RoomPage />} />
+              <Route path="/room/:room_id" element={<RoomPage />} />
 
-            <Route
-              path="/booking/:room_id"
-              element={
-                <RequireAuth>
-                  <BookingPage />
-                </RequireAuth>
-              }
-            />
+              <Route
+                path="/booking/:room_id"
+                element={
+                  <RequireAuth>
+                    <BookingPage />
+                  </RequireAuth>
+                }
+              />
 
-            <Route
-              path="/trips"
-              element={
-                <RequireAuth>
-                  <TripPage />
-                </RequireAuth>
-              }
-            />
+              <Route
+                path="/trips"
+                element={
+                  <RequireAuth>
+                    <TripPage />
+                  </RequireAuth>
+                }
+              />
 
-            <Route
-              path="/admin"
-              element={
-                <RequireAdminAuth>
-                  <AdminPage />
-                </RequireAdminAuth>
-              }
-            />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+              <Route
+                path="/admin"
+                element={
+                  <RequireAdminAuth>
+                    <AdminPage />
+                  </RequireAdminAuth>
+                }
+              />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </Provider>
   );
 }

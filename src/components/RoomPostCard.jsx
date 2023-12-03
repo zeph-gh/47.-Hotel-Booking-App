@@ -1,20 +1,8 @@
-import { useEffect, useState } from "react";
 import { Col, Image, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import homeImages from "./homeImages";
 
-export default function RoomPostCard() {
-  const [rooms, setRooms] = useState([]);
-  const url =
-    "https://booking-system-api-zeph-goh.sigma-school-full-stack.repl.co/rooms";
-
-  useEffect(() => {
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => setRooms(data))
-      .catch((error) => console.error("Error:", error));
-  }, [url]);
-
+export default function RoomPostCard({ rooms }) {
   return (
     <div className="mx-5 mb-5 p-5">
       {rooms.length > 0 && (
@@ -26,7 +14,7 @@ export default function RoomPostCard() {
                 {room.availability ? (
                   <Link
                     to={`/room/${room.room_id}`}
-                    style={{ textDecoration: "none", color: "inherit" }}
+                    style={{ textDecoration: "none", color: "black" }}
                   >
                     <Image
                       src={src}

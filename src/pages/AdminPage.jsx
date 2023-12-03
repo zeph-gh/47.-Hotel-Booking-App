@@ -1,97 +1,75 @@
-import { useCallback, useEffect, useState } from "react";
-import { Nav, Spinner } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Button, Nav, Spinner } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  cancelBooking,
+  deleteBooking,
+  fetchBookings,
+  reconfirmBooking,
+} from "../features/bookings/bookingsSlice";
 
 export default function AdminPage() {
-  const [bookings, setBookings] = useState([]);
   const [filter, setFilter] = useState("cancelled");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingButton, setIsLoadingButton] = useState(false);
 
-  const fetchBookings = useCallback(async () => {
-    setIsLoading(true);
-    const response = await fetch(
-      "https://booking-system-api-zeph-goh.sigma-school-full-stack.repl.co/bookings"
-    );
-    const data = await response.json();
-    setBookings(data);
-    setIsLoading(false);
-  }, []);
+  const dispatch = useDispatch();
+  const bookings = useSelector((state) => state.bookings.bookings);
 
   useEffect(() => {
-    fetchBookings();
-  }, [fetchBookings]);
+    dispatch(fetchBookings());
+    setIsLoading(false);
+  }, [dispatch]);
 
   const handleCancel = async (booking_id) => {
-    const response = await fetch(
-      `https://booking-system-api-zeph-goh.sigma-school-full-stack.repl.co/trips/${booking_id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          status: "cancelled",
-        }),
-      }
-    );
+    setIsLoadingButton(true);
+    const action = await dispatch(cancelBooking(booking_id));
 
-    if (response.ok) {
-      // If the request was successful, refetch the trips
-      fetchBookings();
+    if (cancelBooking.fulfilled.match(action)) {
       alert("Success to cancel trip.");
-    } else {
+    } else if (cancelBooking.rejected.match(action)) {
+      console.error(action.error);
       alert("Failed to cancel trip.");
     }
+    setIsLoadingButton(false);
   };
 
-  const handleConfirm = async (booking_id) => {
-    const response = await fetch(
-      `https://booking-system-api-zeph-goh.sigma-school-full-stack.repl.co/trips/${booking_id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          status: "confirmed",
-        }),
-      }
-    );
+  const handleReconfirm = async (booking_id) => {
+    setIsLoadingButton(true);
+    const action = await dispatch(reconfirmBooking(booking_id));
 
-    if (response.ok) {
-      // If the request was successful, refetch the trips
-      fetchBookings();
+    if (reconfirmBooking.fulfilled.match(action)) {
       alert("Success to confirm trip.");
-    } else {
+    } else if (reconfirmBooking.rejected.match(action)) {
+      console.error(action.error);
       alert("Failed to confirm trip.");
     }
+    setIsLoadingButton(false);
   };
 
   const handleDelete = async (booking_id) => {
-    const response = await fetch(
-      `https://booking-system-api-zeph-goh.sigma-school-full-stack.repl.co/bookings/${booking_id}`,
-      {
-        method: "Delete",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    setIsLoadingButton(true);
+    const action = await dispatch(deleteBooking(booking_id));
 
-    if (response.ok) {
-      // If the request was successful, refetch the trips
-      fetchBookings();
-      alert("Success to delete booking.");
-    } else {
-      alert("Failed to delete booking.");
+    if (deleteBooking.fulfilled.match(action)) {
+      alert("Success to delete trip.");
+    } else if (deleteBooking.rejected.match(action)) {
+      console.error(action.error);
+      alert("Failed to delete trip.");
     }
+    setIsLoadingButton(false);
+    dispatch(fetchBookings()); // re-fetch again for renew table
   };
 
-  const filteredBookings =
+  const sortedAndFilteredBookings =
     bookings.length > 0
-      ? bookings.filter((booking) => {
-          if (filter === "") return true; // If no filter is set, show all bookings
-          return booking.status === filter; // Otherwise, only show bookings that match the filter
-        })
+      ? [...bookings]
+          // in Redux, the state is immutable, should create a copy of the bookings (...) array before sorting it
+          .sort((a, b) => a.booking_id - b.booking_id)
+          .filter((booking) => {
+            if (filter === "") return true; // If no filter is set, show all bookings
+            return booking.status === filter; // Otherwise, only show bookings that match the filter
+          })
       : [];
 
   return (
@@ -114,12 +92,13 @@ export default function AdminPage() {
           </Nav.Link>
         </Nav.Item>
       </Nav>
+
       {isLoading ? (
         <div className="d-flex justify-content-center mt-5">
           <Spinner animation="border" size="xl" />
         </div>
-      ) : filteredBookings.length > 0 ? (
-        <div className="my-4">
+      ) : sortedAndFilteredBookings.length > 0 ? (
+        <div className="my-4 table-responsive">
           <table
             className="text-center"
             style={{ border: "1px solid black", borderCollapse: "collapse" }}
@@ -127,7 +106,10 @@ export default function AdminPage() {
             <thead>
               <tr>
                 <th style={{ border: "1px solid black", padding: "10px" }}>
-                  Booking
+                  No
+                </th>
+                <th style={{ border: "1px solid black", padding: "10px" }}>
+                  Booking Date
                 </th>
                 <th style={{ border: "1px solid black", padding: "10px" }}>
                   User ID
@@ -180,11 +162,16 @@ export default function AdminPage() {
               </tr>
             </thead>
             <tbody>
-              {filteredBookings.map((booking, index) => {
+              {sortedAndFilteredBookings.map((booking, index) => {
                 return (
                   <tr key={index}>
                     <td style={{ border: "1px solid black", padding: "10px" }}>
                       {index + 1}
+                    </td>
+                    <td style={{ border: "1px solid black", padding: "10px" }}>
+                      {new Date(booking.booking_date).toLocaleDateString(
+                        "en-CA"
+                      )}
                     </td>
                     <td style={{ border: "1px solid black", padding: "10px" }}>
                       {booking.user_id}
@@ -235,31 +222,59 @@ export default function AdminPage() {
                     <td style={{ border: "1px solid black", padding: "10px" }}>
                       {booking.phone_number}
                     </td>
-                    {filter !== "cancelled" ? (
+                    {filter === "confirmed" ? (
                       <td
                         style={{ border: "1px solid black", padding: "10px" }}
                       >
-                        <button
+                        <Button
                           onClick={() => handleCancel(booking.booking_id)}
+                          disabled={isLoadingButton}
+                          className="border-dark w-100"
+                          variant="light"
                         >
-                          Cancel
-                        </button>
+                          {isLoadingButton ? (
+                            <div className="d-flex justify-content-center px-3">
+                              <Spinner animation="border" size="xl" />
+                            </div>
+                          ) : (
+                            "Cancel"
+                          )}
+                        </Button>
                       </td>
                     ) : (
                       <>
                         <td
                           style={{ border: "1px solid black", padding: "10px" }}
                         >
-                          <button
-                            onClick={() => handleConfirm(booking.booking_id)}
+                          <Button
+                            onClick={() => handleReconfirm(booking.booking_id)}
+                            disabled={isLoadingButton}
+                            className="border-dark w-100"
+                            variant="light"
                           >
-                            Confirm
-                          </button>
-                          <button
+                            {isLoadingButton ? (
+                              <div className="d-flex justify-content-center px-3">
+                                <Spinner animation="border" size="xl" />
+                              </div>
+                            ) : (
+                              "Confirm"
+                            )}
+                          </Button>
+
+                          <Button
                             onClick={() => handleDelete(booking.booking_id)}
+                            disabled={isLoadingButton}
+                            className="border-dark w-100"
+                            variant="light"
                           >
-                            Delete
-                          </button>
+                            {isLoadingButton ? (
+                              <div className="d-flex justify-content-center px-3">
+                                <Spinner animation="border" size="xl" />
+                              </div>
+                            ) : (
+                              "Delete"
+                            )}
+                          </Button>
                         </td>
                       </>
                     )}
