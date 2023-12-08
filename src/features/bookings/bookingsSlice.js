@@ -1,5 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { storage, db } from "../../firebase";
 
 const BASE_URL = "https://315-hotel-booking-app-api.zeph-goh.repl.co";
 
@@ -76,6 +79,61 @@ export const deleteBooking = createAsyncThunk(
   }
 );
 
+//ProfilePage.jsx
+export const fetchProfileImage = createAsyncThunk(
+  "bookings/fetchProfileImage",
+  async (user_id) => {
+    try {
+      // Reference to the user's document in Firestore
+      const userRef = doc(db, `users/${user_id}`);
+
+      // Fetch the user document
+      const userSnap = await getDoc(userRef);
+
+      // Extract the user data
+      const user = userSnap.data();
+
+      // Return the profileImage
+      return user.profileImage;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+);
+
+//ProfilePage.jsx
+export const updateProfileImage = createAsyncThunk(
+  "bookings/updateProfileImage",
+  async ({ user_id, file }) => {
+    try {
+      let imageUrl = "";
+      if (file) {
+        const imageRef = ref(storage, `users/${file.name}`); //where to store
+        const response = await uploadBytes(imageRef, file); //receive uploaded file data
+        imageUrl = await getDownloadURL(response.ref); //receive uploaded file url
+
+        // Reference to the user's document in Firestore
+        const userRef = doc(db, `users/${user_id}`);
+        // Update the user's profile with the image URL
+        await setDoc(userRef, { profileImage: imageUrl }, { merge: true });
+
+        // Get the updated user data
+        const userSnap = await getDoc(userRef);
+        const user = {
+          id: userSnap.id,
+          ...userSnap.data(),
+        };
+
+        return user;
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+);
+
 //Slice
 const bookingsSlice = createSlice({
   name: "bookings",
@@ -86,6 +144,8 @@ const bookingsSlice = createSlice({
     booking: [],
     email: [],
     bookings: [],
+    user: null,
+    profileImage: null,
   },
   reducers: {},
 
@@ -143,6 +203,17 @@ const bookingsSlice = createSlice({
       state.bookings = state.bookings.filter(
         (booking) => booking.booking_id !== action.payload.booking_id
       );
+    });
+
+    // fetchProfileImage
+    builder.addCase(fetchProfileImage.fulfilled, (state, action) => {
+      state.profileImage = action.payload;
+    });
+
+    //updateProfileImage
+    builder.addCase(updateProfileImage.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.profileImage = action.payload.profileImage;
     });
   },
 });

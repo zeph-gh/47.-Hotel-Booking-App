@@ -173,20 +173,29 @@ export default function AuthPage() {
           >
             <i className="bi bi-facebook"></i> Sign up with Facebook
           </Button>
-          <p style={{ textAlign: "center" }}>or</p>
-          <Button className="rounded-pill" onClick={handleShowSignUp}>
+
+          <p className="m-0" style={{ textAlign: "center" }}>
+            or
+          </p>
+
+          <Button
+            className="rounded-pill"
+            variant="danger"
+            onClick={handleShowSignUp}
+          >
             Create an account
           </Button>
+
           <p style={{ fontSize: "12px" }}>
             By signing up, you agree to the Terms of Service and Privacy Policy
             including Cookie Use.
           </p>
-          <p className="mt-5" style={{ fontWeight: "bold" }}>
+          <p className="mt-5 mb-1" style={{ fontWeight: "bold" }}>
             Already have an account?
           </p>
           <Button
             className="rounded-pill"
-            variant="outline-primary"
+            variant="outline-danger"
             onClick={handleShowLogin}
           >
             Sign In
@@ -252,7 +261,11 @@ export default function AuthPage() {
                       : ""}
                   </p>
 
-                  <Button className="rounded-pill" type="submit">
+                  <Button
+                    className="rounded-pill"
+                    variant="danger"
+                    type="submit"
+                  >
                     {modalShow === "SignUp" ? "Sign up" : "Log in"}
                   </Button>
                 </Form>

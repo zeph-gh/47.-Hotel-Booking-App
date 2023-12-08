@@ -13,6 +13,7 @@ import RequireAdminAuth from "./components/RequireAdminAuth";
 import "./App.css";
 import { Provider } from "react-redux";
 import store from "./store";
+import ProfilePage from "./pages/ProfilePage";
 
 export default function App() {
   return (
@@ -41,6 +42,15 @@ export default function App() {
                 element={
                   <RequireAuth>
                     <TripPage />
+                  </RequireAuth>
+                }
+              />
+
+              <Route
+                path="/profile"
+                element={
+                  <RequireAuth>
+                    <ProfilePage />
                   </RequireAuth>
                 }
               />

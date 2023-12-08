@@ -35,3 +35,20 @@
     border-bottom-right-radius: 1.5rem;
   }
 }
+
+.icon {
+  text-decoration: none;
+  color: rgb(69, 69, 69);
+}
+
+i {
+  color: rgb(69, 69, 69);
+}
+
+a {
+  color: rgb(69, 69, 69);
+}
+
+a:hover {
+  cursor: pointer;
+}
