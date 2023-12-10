@@ -11,6 +11,7 @@ import {
   fetchRooms,
 } from "../features/bookings/bookingsSlice";
 import Footer from "./Footer";
+import defaultProfileImage from "../assets/defaultProfileImage.png";
 
 export default function TopBottonBar() {
   const auth = getAuth();
@@ -85,7 +86,7 @@ export default function TopBottonBar() {
           <i className="bi bi-list fs-3 text-secondary"></i>
 
           <Image
-            src={profileImage || "/src/assets/profileImage.png"}
+            src={profileImage || defaultProfileImage}
             style={{
               width: "38px",
               height: "38px",
