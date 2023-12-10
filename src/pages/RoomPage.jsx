@@ -2,16 +2,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   Button,
+  Carousel,
   Col,
   Container,
   Form,
   Image,
   Row,
-  Spinner,
 } from "react-bootstrap";
 import roomImages from "../components/roomImages";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRoomByRoomId } from "../features/bookings/bookingsSlice";
+import RoomMap from "../components/RoomMap";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function RoomPage() {
   const { room_id } = useParams(); // get the room id from the URL
@@ -21,27 +23,32 @@ export default function RoomPage() {
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
 
+  const [minCheckoutDate, setMinCheckoutDate] = useState(null);
+
   const [errorMessage, setErrorMessage] = useState("");
 
   const [guests, setGuests] = useState(1);
 
   const dispatch = useDispatch();
   const room = useSelector((state) => state.bookings.room);
+  const loading = useSelector((state) => state.bookings.loading);
+
+  const center = {
+    lat: room.latitude,
+    lng: room.longitude,
+  };
 
   useEffect(() => {
     dispatch(fetchRoomByRoomId(room_id));
   }, [room_id, dispatch]);
 
-  if (!room) {
-    return (
-      <div className="d-flex justify-content-center mt-5">
-        <Spinner animation="border" size="xl" />
-      </div>
-    );
-  }
-
   const handleCheckInDateChange = (event) => {
-    setCheckInDate(new Date(event.target.value));
+    const selectedDate = new Date(event.target.value);
+    setCheckInDate(selectedDate);
+
+    const nextDay = new Date(selectedDate);
+    nextDay.setDate(selectedDate.getDate() + 1);
+    setMinCheckoutDate(nextDay.toISOString().split("T")[0]); // let users pick checkout > checkin only
   };
 
   const handleCheckOutDateChange = (event) => {
@@ -49,7 +56,7 @@ export default function RoomPage() {
   };
 
   const handleGuestsChange = (event) => {
-    setGuests(event.target.value); // Add this line
+    setGuests(event.target.value);
   };
 
   const calculateTotalPrice = () => {
@@ -103,127 +110,172 @@ export default function RoomPage() {
   const images = roomImages[room_id];
 
   return (
-    <div className="py-4 mx-5 px-5">
-      <h1 className="my-3">{room.room_name}</h1>
-      <Container>
-        <Row>
-          <Col xxl={6} className="mt-4">
-            <Image
-              src={images[0]}
-              alt={room.room_type}
-              height="600px"
-              className="rounded-xxl-start rounded-xs-start"
-            />
-          </Col>
+    <>
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <div className="py-4 mx-5 px-5">
+          <h1 className="my-3 ms-3">{room.room_name}</h1>
 
-          <Col xxl={6} className="my-4">
-            <Row>
-              <Col md={6}>
-                <Image src={images[1]} alt={room.room_type} height="300px" />
-              </Col>
+          <div className="d-none d-xxl-block">
+            <Container>
+              <Row>
+                <Col xxl={6} className="mt-4">
+                  <Image
+                    src={images[0]}
+                    alt={room.room_type}
+                    height="560px"
+                    className="rounded-xxl-start rounded-xs-start"
+                  />
+                </Col>
 
-              <Col md={6}>
-                <Image
-                  src={images[2]}
-                  alt={room.room_type}
-                  height="300px"
-                  className="rounded-xxl-top-right "
-                />
-              </Col>
-            </Row>
+                <Col xxl={6} className="my-4">
+                  <Row>
+                    <Col md={6}>
+                      <Image
+                        src={images[1]}
+                        alt={room.room_type}
+                        height="280px"
+                      />
+                    </Col>
 
-            <Row>
-              <Col md={6}>
-                <Image
-                  src={images[0]}
-                  alt={room.room_type}
-                  height="300px"
-                  className="rounded-xs-bottom-left"
-                />
-              </Col>
+                    <Col md={6}>
+                      <Image
+                        src={images[2]}
+                        alt={room.room_type}
+                        height="280px"
+                        className="rounded-xxl-top-right "
+                      />
+                    </Col>
+                  </Row>
 
-              <Col md={6}>
-                <Image
-                  src={images[1]}
-                  alt={room.room_type}
-                  height="300px"
-                  className="rounded-xxl-bottom-right rounded-xs-bottom-right"
-                />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Container>
+                  <Row>
+                    <Col md={6}>
+                      <Image
+                        src={images[0]}
+                        alt={room.room_type}
+                        height="280px"
+                        className="rounded-xs-bottom-left"
+                      />
+                    </Col>
 
-      <Row>
-        <Col md={9}>
-          <h1 className="my-5">Room in {room.room_location}</h1>
-
-          <div className="border-top border-bottom py-5">
-            <h5>Room in a rental unit</h5>
-            <p>Your own room in a home, plus access to shared spaces.</p>
-
-            <h5>Shared common spaces</h5>
-            <p>Share parts of the home with the Host and other guests.</p>
-
-            <h5>Free cancellation for 48 hours</h5>
+                    <Col md={6}>
+                      <Image
+                        src={images[1]}
+                        alt={room.room_type}
+                        height="280px"
+                        className="rounded-xxl-bottom-right rounded-xs-bottom-right"
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+            </Container>
           </div>
-        </Col>
 
-        <Col md={3}>
-          <div className="p-4 my-5 border rounded-4">
-            <Form onSubmit={handleReserve}>
-              <h4>${room.price} night</h4>
-              <div className="my-5 border border-dark p-3">
-                <Form.Group controlId="formCheckIn">
-                  <Form.Label>Check-in</Form.Label>
-                  <Form.Control
-                    type="date"
-                    min={new Date().toISOString().split("T")[0]} // let users pick from today to future only
-                    onChange={handleCheckInDateChange}
-                  />
-                </Form.Group>
+          <div className="d-block d-xxl-none mt-5">
+            <Container>
+              <Carousel interval={null} className="h-100 w-100">
+                {images.map((image, index) => (
+                  <Carousel.Item key={index}>
+                    <Image
+                      src={image}
+                      alt={room.room_name}
+                      className="rounded-4 h-100 w-100"
+                    />
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+            </Container>
+          </div>
 
-                <Form.Group controlId="formCheckOut">
-                  <Form.Label>Check-out</Form.Label>
-                  <Form.Control
-                    type="date"
-                    min={new Date().toISOString().split("T")[0]}
-                    onChange={handleCheckOutDateChange}
-                  />
-                </Form.Group>
+          <Row>
+            <Col xl={8}>
+              <h1 className="my-5 pt-5">Room in {room.room_location}</h1>
 
-                <Form.Group controlId="formGuests">
-                  <Form.Label>Guests</Form.Label>
-                  <Form.Control as="select" onChange={handleGuestsChange}>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                  </Form.Control>
-                </Form.Group>
+              <div className="border-top border-bottom py-5">
+                <h5>Room in a rental unit</h5>
+                <p>Your own room in a home, plus access to shared spaces.</p>
+
+                <h5 className="pt-3">Shared common spaces</h5>
+                <p>Share parts of the home with the Host and other guests.</p>
+
+                <h5 className="pt-3">Free cancellation for 48 hours</h5>
               </div>
+            </Col>
 
-              <p className="border-top my-4 pt-4 fw-bold fs-5">
-                Total Price: ${calculateTotalPrice()}
-              </p>
+            <Col md={12} xl={4}>
+              <div className="py-4 px-5 my-5 border rounded-4 shadow-lg">
+                <Form onSubmit={handleReserve}>
+                  <h3>
+                    ${room.price} <span className="fw-light fs-5">night</span>
+                  </h3>
+                  <div className="my-4 border border-dark rounded-4 p-3">
+                    <Form.Group controlId="formCheckIn">
+                      <Form.Label>Check-in</Form.Label>
+                      <Form.Control
+                        type="date"
+                        min={new Date().toISOString().split("T")[0]} // let users pick from today to future only
+                        onChange={handleCheckInDateChange}
+                      />
+                    </Form.Group>
 
-              <Button
-                variant="light"
-                className="border-dark fw-bold w-100"
-                type="submit"
-              >
-                Reserve
-              </Button>
-              {errorMessage && <p className="text-danger">{errorMessage}</p>}
-            </Form>
-          </div>
-        </Col>
-      </Row>
-    </div>
+                    <Form.Group controlId="formCheckOut">
+                      <Form.Label>Check-out</Form.Label>
+                      <Form.Control
+                        type="date"
+                        min={minCheckoutDate}
+                        onChange={handleCheckOutDateChange}
+                      />
+                    </Form.Group>
+
+                    <Form.Group controlId="formGuests">
+                      <Form.Label>Guests</Form.Label>
+                      <Form.Control as="select" onChange={handleGuestsChange}>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                      </Form.Control>
+                    </Form.Group>
+                  </div>
+
+                  <p className="border-top my-4 pt-4 fw-bold fs-5">
+                    Total Price: ${calculateTotalPrice()}
+                  </p>
+
+                  <Button
+                    variant="danger"
+                    className="fw-bold py-2 w-100"
+                    type="submit"
+                  >
+                    <span className="fw-medium">Reserve</span>
+                  </Button>
+
+                  {errorMessage && (
+                    <p className="text-danger">{errorMessage}</p>
+                  )}
+                </Form>
+              </div>
+            </Col>
+          </Row>
+
+          {room.latitude && room.longitude ? (
+            <RoomMap
+              center={center}
+              room_name={room.room_name}
+              location={room.room_location}
+              price={room.price}
+            />
+          ) : null}
+        </div>
+      )}
+    </>
   );
 }

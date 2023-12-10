@@ -79,6 +79,17 @@ export default function TopBottonBar() {
           ""
         )}
 
+        {location.pathname !== "/host" ? ( // no my trips button when /trips
+          <Link to="/host" className="ms-auto me-4">
+            <Button
+              variant="outline-light"
+              className="rounded-5 fw-medium text-dark py-2 px-3"
+            >
+              Switch to hosting
+            </Button>
+          </Link>
+        ) : null}
+
         <Navbar.Toggle
           aria-controls="basic-navbar-nav"
           className="px-3 pt-2 pb-0 border border-2 rounded-5"

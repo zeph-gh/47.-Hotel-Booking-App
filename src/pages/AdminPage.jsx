@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Nav, Spinner } from "react-bootstrap";
+import { Button, Nav } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   cancelBooking,
@@ -7,6 +7,7 @@ import {
   fetchBookings,
   reconfirmBooking,
 } from "../features/bookings/bookingsSlice";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function AdminPage() {
   const [filter, setFilter] = useState("cancelled");
@@ -94,9 +95,7 @@ export default function AdminPage() {
       </Nav>
 
       {isLoading ? (
-        <div className="d-flex justify-content-center mt-5">
-          <Spinner animation="border" size="xl" />
-        </div>
+        <LoadingSpinner />
       ) : sortedAndFilteredBookings.length > 0 ? (
         <div className="my-4 table-responsive">
           <table
@@ -232,13 +231,7 @@ export default function AdminPage() {
                           className="border-dark w-100"
                           variant="light"
                         >
-                          {isLoadingButton ? (
-                            <div className="d-flex justify-content-center px-3">
-                              <Spinner animation="border" size="xl" />
-                            </div>
-                          ) : (
-                            "Cancel"
-                          )}
+                          {isLoadingButton ? <LoadingSpinner /> : "Cancel"}
                         </Button>
                       </td>
                     ) : (
@@ -252,13 +245,7 @@ export default function AdminPage() {
                             className="border-dark w-100"
                             variant="light"
                           >
-                            {isLoadingButton ? (
-                              <div className="d-flex justify-content-center px-3">
-                                <Spinner animation="border" size="xl" />
-                              </div>
-                            ) : (
-                              "Confirm"
-                            )}
+                            {isLoadingButton ? <LoadingSpinner /> : "Confirm"}
                           </Button>
 
                           <Button
@@ -267,13 +254,7 @@ export default function AdminPage() {
                             className="border-dark w-100"
                             variant="light"
                           >
-                            {isLoadingButton ? (
-                              <div className="d-flex justify-content-center px-3">
-                                <Spinner animation="border" size="xl" />
-                              </div>
-                            ) : (
-                              "Delete"
-                            )}
+                            {isLoadingButton ? <LoadingSpinner /> : "Delete"}
                           </Button>
                         </td>
                       </>

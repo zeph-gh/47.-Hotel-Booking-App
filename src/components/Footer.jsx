@@ -1,6 +1,31 @@
+import { useState } from "react";
+import { Collapse } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function Footer({ handleOpenModal }) {
+  const [openHosting, setOpenHosting] = useState(false);
+  const [openCorpInfo, setOpenCorpInfo] = useState(false);
+  const [openSupport, setOpenSupport] = useState(false);
+
+  const [classNameHosting, setClassNameHosting] = useState(true);
+  const [classNameCorpInfo, setClassNameCorpInfo] = useState(true);
+  const [classNameSupport, setClassNameSupport] = useState(true);
+
+  const handleOpenCollapseHosting = () => {
+    setOpenHosting(!openHosting);
+    setClassNameHosting(!classNameHosting);
+  };
+
+  const handleOpenCollapseCorpInfo = () => {
+    setOpenCorpInfo(!openCorpInfo);
+    setClassNameCorpInfo(!classNameCorpInfo);
+  };
+
+  const handleOpenCollapseSupport = () => {
+    setOpenSupport(!openSupport);
+    setClassNameSupport(!classNameSupport);
+  };
+
   return (
     <>
       <div className="bg-light row py-5">
@@ -134,7 +159,7 @@ function Footer({ handleOpenModal }) {
 
         <div className="d-none d-lg-block col-md-2">
           <p className="fw-bold">Not a member yet?</p>
-          <p>Get 10% off — become a member today</p>
+          <p className="fw-light">Become a member today</p>
           <Link
             onClick={(event) => {
               event.preventDefault();
@@ -142,7 +167,7 @@ function Footer({ handleOpenModal }) {
             }}
             className="fw-bold text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
           >
-            READ MORE<i className="fas fa-arrow-right"></i>
+            Join now!<i className="fas fa-arrow-right"></i>
           </Link>
         </div>
 
@@ -150,26 +175,157 @@ function Footer({ handleOpenModal }) {
 
         <div className="d-block d-lg-none px-5">
           <a
-            href="#"
-            className="icon fw-bold d-flex justify-content-between align-items-center py-5"
+            className="icon fw-bold d-flex justify-content-between align-items-center pt-4 pb-3"
+            onClick={handleOpenCollapseHosting}
           >
-            HOSTING<i className="fa-solid fa-plus"></i>
+            HOSTING
+            <i
+              className={classNameHosting ? "bi bi-plus-lg" : "bi bi-dash-lg"}
+            ></i>
           </a>
-          <a
-            href="#"
-            className="icon fw-bold d-flex justify-content-between align-items-center pb-5"
-          >
-            CORPORATE INFO<i className="fa-solid fa-plus"></i>
-          </a>
-          <a
-            href="#"
-            className="icon fw-bold d-flex justify-content-between align-items-center pb-5"
-          >
-            SUPPORT<i className="fa-solid fa-plus"></i>
-          </a>
+          <Collapse in={openHosting}>
+            <div className="mb-4">
+              <a
+                href="#"
+                className="d-block pt-4 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                Hosting your home
+              </a>
+              <a
+                href="#"
+                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                AirCover for Hosts
+              </a>
+              <a
+                href="#"
+                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                Hosting resources
+              </a>
+              <a
+                href="#"
+                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                Community forum
+              </a>
+              <a
+                href="#"
+                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                Hosting responsibly
+              </a>
+              <a
+                href="#"
+                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                Airbnb-friendly apartments
+              </a>
+            </div>
+          </Collapse>
 
-          <p className="text-center fw-bold">NOT A MEMBER YET?</p>
-          <p className="text-center">Get 10% off - become a member today</p>
+          <a
+            className="icon fw-bold d-flex justify-content-between align-items-center pt-4 pb-3"
+            onClick={handleOpenCollapseCorpInfo}
+          >
+            CORPORATE INFO
+            <i
+              className={classNameCorpInfo ? "bi bi-plus-lg" : "bi bi-dash-lg"}
+            ></i>
+          </a>
+          <Collapse in={openCorpInfo}>
+            <div className="mb-4">
+              <a
+                href="#"
+                className="d-block pt-4 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                Career
+              </a>
+              <a
+                href="#"
+                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                About us
+              </a>
+              <a
+                href="#"
+                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                Sustainability
+              </a>
+              <a
+                href="#"
+                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                Press
+              </a>
+              <a
+                href="#"
+                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                Investor
+              </a>
+              <a
+                href="#"
+                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                Relations
+              </a>
+              <a
+                href="#"
+                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                Corporate governance
+              </a>
+            </div>
+          </Collapse>
+
+          <a
+            className="icon fw-bold d-flex justify-content-between align-items-center pt-4 pb-3"
+            onClick={handleOpenCollapseSupport}
+          >
+            SUPPORT
+            <i
+              className={classNameSupport ? "bi bi-plus-lg" : "bi bi-dash-lg"}
+            ></i>
+          </a>
+          <Collapse in={openSupport}>
+            <div className="mb-5">
+              <a
+                href="#"
+                className="d-block pt-4 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                Help Center
+              </a>
+              <a
+                href="#"
+                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                Get help with a safety issue
+              </a>
+              <a
+                href="#"
+                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                AirCover
+              </a>
+              <a
+                href="#"
+                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                Anti-discrimination
+              </a>
+              <a
+                href="#"
+                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+              >
+                Disability support
+              </a>
+            </div>
+          </Collapse>
+
+          <p className="text-center fw-bold mt-5">NOT A MEMBER YET?</p>
+          <p className="text-center fw-light">Become a member today</p>
           <Link
             onClick={(event) => {
               event.preventDefault();
@@ -177,12 +333,12 @@ function Footer({ handleOpenModal }) {
             }}
             className="icon fw-bold d-flex justify-content-between align-items-center pb-5"
           >
-            READ MORE<i className="fas fa-arrow-right"></i>
+            Join now!<i className="bi bi-arrow-right"></i>
           </Link>
         </div>
 
         <div>
-          <div className="text-center pt-5">
+          <div className="text-center pt-5 fs-5">
             <Link
               to="https://github.com/xweeton"
               className="icon bi bi-github"
@@ -199,7 +355,9 @@ function Footer({ handleOpenModal }) {
               target="_blank"
             ></Link>
           </div>
-          <p className="text-center pt-3">© 2023 Zeph. All right reserved.</p>
+          <p className="text-center pt-3 fw-medium">
+            © 2023 Zeph. All right reserved.
+          </p>
         </div>
       </div>
     </>

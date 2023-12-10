@@ -159,6 +159,7 @@ const bookingsSlice = createSlice({
     //fetchRoomByRoomId
     builder.addCase(fetchRoomByRoomId.fulfilled, (state, action) => {
       state.room = action.payload;
+      state.loading = false;
     });
 
     //confirmBooking

@@ -14,6 +14,7 @@ import "./App.css";
 import { Provider } from "react-redux";
 import store from "./store";
 import ProfilePage from "./pages/ProfilePage";
+import HostPage from "./pages/HostPage";
 
 export default function App() {
   return (
@@ -54,6 +55,8 @@ export default function App() {
                   </RequireAuth>
                 }
               />
+
+              <Route path="/host" element={<HostPage />} />
 
               <Route
                 path="/admin"

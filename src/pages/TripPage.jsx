@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../components/AuthProvider";
-import { Button, Container, Nav, Spinner } from "react-bootstrap";
+import { Button, Container, Nav } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function TripPage() {
   const [trips, setTrips] = useState([]);
@@ -60,9 +61,7 @@ export default function TripPage() {
   return (
     <div>
       {isLoading ? (
-        <div className="d-flex justify-content-center mt-5">
-          <Spinner animation="border" size="xl" />
-        </div>
+        <LoadingSpinner />
       ) : filteredTrips.length > 0 ? (
         <>
           <h1 className="my-4 ms-5">Your Trips</h1>

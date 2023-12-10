@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Button, Col, Container, Image, Row, Spinner } from "react-bootstrap";
+import { Button, Col, Container, Image, Row } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../components/AuthProvider";
 import { useDispatch } from "react-redux";
@@ -7,6 +7,7 @@ import {
   confirmBooking,
   sendConfirmationEmail,
 } from "../features/bookings/bookingsSlice";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function BookingPage() {
   const location = useLocation();
@@ -114,13 +115,7 @@ export default function BookingPage() {
               className="mt-3 border-dark"
               variant="light"
             >
-              {isLoading ? (
-                <div className="d-flex justify-content-center px-3">
-                  <Spinner animation="border" size="xl" />
-                </div>
-              ) : (
-                "Confirm"
-              )}
+              {isLoading ? <LoadingSpinner /> : "Confirm"}
             </Button>
           </form>
         </Col>
