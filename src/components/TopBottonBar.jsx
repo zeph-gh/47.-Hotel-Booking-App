@@ -85,7 +85,7 @@ export default function TopBottonBar() {
           <i className="bi bi-list fs-3 text-secondary"></i>
 
           <Image
-            src={profileImage || "src/assets/profileImage.png"}
+            src={profileImage || "/src/assets/profileImage.png"}
             style={{
               width: "38px",
               height: "38px",
