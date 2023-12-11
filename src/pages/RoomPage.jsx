@@ -4,9 +4,9 @@ import {
   Button,
   Carousel,
   Col,
-  Container,
   Form,
   Image,
+  Modal,
   Row,
 } from "react-bootstrap";
 import roomImages from "../components/roomImages";
@@ -37,6 +37,9 @@ export default function RoomPage() {
     lat: room.latitude,
     lng: room.longitude,
   };
+
+  const [modalShow, setModalShow] = useState(false);
+  const [modalImage, setModalImage] = useState("");
 
   useEffect(() => {
     dispatch(fetchRoomByRoomId(room_id));
@@ -109,84 +112,106 @@ export default function RoomPage() {
 
   const images = roomImages[room_id];
 
+  const handleImageClick = (image) => {
+    setModalImage(image);
+    setModalShow(true);
+  };
+
   return (
     <>
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <div className="py-4 mx-5 px-5">
+        <div className="py-4 mx-md-4 px-md-5 mx-1 px-1">
           <h1 className="my-3 ms-3">{room.room_name}</h1>
 
-          <div className="d-none d-xxl-block">
-            <Container>
-              <Row>
-                <Col xxl={6} className="mt-4">
-                  <Image
-                    src={images[0]}
-                    alt={room.room_type}
-                    height="560px"
-                    className="rounded-xxl-start rounded-xs-start"
-                  />
-                </Col>
+          <div className="d-none d-lg-block">
+            <Row>
+              <Col xs={6} className="mt-4">
+                <Image
+                  src={images[0]}
+                  alt={room.room_type}
+                  height="560px"
+                  width="100%"
+                  className="rounded-xs-bottom-left rounded-xs-top-left"
+                  fluid
+                  onClick={() => handleImageClick(images[0])}
+                />
+              </Col>
 
-                <Col xxl={6} className="my-4">
-                  <Row>
-                    <Col md={6}>
-                      <Image
-                        src={images[1]}
-                        alt={room.room_type}
-                        height="280px"
-                      />
-                    </Col>
+              <Col xs={6} className="my-4">
+                <Row>
+                  <Col xs={6}>
+                    <Image
+                      src={images[1]}
+                      alt={room.room_type}
+                      height="280px"
+                      width="100%"
+                      fluid
+                      onClick={() => handleImageClick(images[1])}
+                    />
+                  </Col>
 
-                    <Col md={6}>
-                      <Image
-                        src={images[2]}
-                        alt={room.room_type}
-                        height="280px"
-                        className="rounded-xxl-top-right "
-                      />
-                    </Col>
-                  </Row>
+                  <Col xs={6}>
+                    <Image
+                      src={images[2]}
+                      alt={room.room_type}
+                      height="280px"
+                      width="100%"
+                      className="rounded-xs-top-right"
+                      fluid
+                      onClick={() => handleImageClick(images[2])}
+                    />
+                  </Col>
+                </Row>
 
-                  <Row>
-                    <Col md={6}>
-                      <Image
-                        src={images[0]}
-                        alt={room.room_type}
-                        height="280px"
-                        className="rounded-xs-bottom-left"
-                      />
-                    </Col>
+                <Row>
+                  <Col xs={6}>
+                    <Image
+                      src={images[0]}
+                      alt={room.room_type}
+                      height="280px"
+                      width="100%"
+                      className="mt-4 "
+                      fluid
+                      onClick={() => handleImageClick(images[0])}
+                    />
+                  </Col>
 
-                    <Col md={6}>
-                      <Image
-                        src={images[1]}
-                        alt={room.room_type}
-                        height="280px"
-                        className="rounded-xxl-bottom-right rounded-xs-bottom-right"
-                      />
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-            </Container>
+                  <Col xs={6}>
+                    <Image
+                      src={images[1]}
+                      alt={room.room_type}
+                      height="280px"
+                      width="100%"
+                      className="mt-4 rounded-xs-bottom-right"
+                      fluid
+                      onClick={() => handleImageClick(images[1])}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
           </div>
 
-          <div className="d-block d-xxl-none mt-5">
-            <Container>
-              <Carousel interval={null} className="h-100 w-100">
-                {images.map((image, index) => (
-                  <Carousel.Item key={index}>
-                    <Image
-                      src={image}
-                      alt={room.room_name}
-                      className="rounded-4 h-100 w-100"
-                    />
-                  </Carousel.Item>
-                ))}
-              </Carousel>
-            </Container>
+          <Modal show={modalShow} size="md" onHide={() => setModalShow(false)}>
+            <Modal.Body>
+              <Image src={modalImage} className="w-100" />
+            </Modal.Body>
+          </Modal>
+
+          <div className="d-block d-lg-none mt-5 ">
+            <Carousel interval={null} className="h-100 w-100">
+              {images.map((image, index) => (
+                <Carousel.Item key={index}>
+                  <Image
+                    src={image}
+                    alt={room.room_name}
+                    className="rounded-4 h-100 w-100"
+                  />
+                </Carousel.Item>
+              ))}
+            </Carousel>
           </div>
 
           <Row>

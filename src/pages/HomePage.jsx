@@ -1,9 +1,9 @@
-import RoomMidBody from "../components/RoomMidBody";
+import HomeMidBody from "../components/HomeMidBody";
 
 export default function HomePage() {
   return (
     <>
-      <RoomMidBody />
+      <HomeMidBody />
     </>
   );
 }

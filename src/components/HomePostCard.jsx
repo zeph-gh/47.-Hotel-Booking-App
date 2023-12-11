@@ -2,7 +2,7 @@ import { Carousel, Col, Image, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import roomImages from "./roomImages";
 
-export default function RoomPostCard({ rooms }) {
+export default function HomePostCard({ rooms }) {
   return (
     <div className="mx-5 mb-5 p-5">
       {rooms.length > 0 && (
@@ -16,18 +16,15 @@ export default function RoomPostCard({ rooms }) {
                     to={`/room/${room.room_id}`}
                     style={{ textDecoration: "none", color: "black" }}
                   >
-                    <Carousel
-                      interval={null}
-                      style={{ width: "280px", height: "280px" }}
-                    >
+                    <Carousel interval={null} style={{ width: "100%" }}>
                       {images.map((image, index) => (
                         <Carousel.Item key={index}>
                           <Image
                             src={image}
                             alt={room.room_name}
                             className="rounded-4"
-                            height="280px"
-                            width="280px"
+                            height="100%"
+                            width="100%"
                           />
                         </Carousel.Item>
                       ))}
@@ -49,15 +46,16 @@ export default function RoomPostCard({ rooms }) {
                         style={{
                           filter: "grayscale(100%)",
                           objectFit: "cover",
-                          height: "280px",
+                          height: "100%",
+                          width: "100%",
                         }}
                       />
                       <div
                         style={{
                           position: "absolute",
                           bottom: 0,
-                          height: "280px",
-                          width: "280px",
+                          height: "100%",
+                          width: "100%",
                           background:
                             "linear-gradient(to bottom left, #ff385c 30%, transparent 47%)",
                           display: "flex",

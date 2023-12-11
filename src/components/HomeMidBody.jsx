@@ -1,10 +1,10 @@
-import RoomPostCard from "./RoomPostCard";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRooms } from "../features/bookings/bookingsSlice";
 import { useEffect } from "react";
 import LoadingSpinner from "./LoadingSpinner";
+import HomePostCard from "./HomePostCard";
 
-export default function RoomMidBody() {
+export default function HomeMidBody() {
   const loading = useSelector((state) => state.bookings.loading);
   const rooms = useSelector((state) => state.bookings.rooms);
   const dispatch = useDispatch();
@@ -13,5 +13,5 @@ export default function RoomMidBody() {
     dispatch(fetchRooms());
   }, [dispatch]);
 
-  return <>{loading ? <LoadingSpinner /> : <RoomPostCard rooms={rooms} />}</>;
+  return <>{loading ? <LoadingSpinner /> : <HomePostCard rooms={rooms} />}</>;
 }

@@ -18,39 +18,16 @@ h5 {
   font-weight: 700 !important;
 }
 
-@media (min-width: 1400px) {
-  .rounded-xxl-start {
+@media (min-width: 900px) {
+  .rounded-xs-top-left {
     border-top-left-radius: 1.5rem;
-    border-bottom-left-radius: 1.5rem;
   }
-}
-
-@media (max-width: 1399px) {
-  .rounded-xs-start {
-    border-top-left-radius: 1.5rem;
+  .rounded-xs-top-right {
     border-top-right-radius: 1.5rem;
   }
-}
-
-@media (min-width: 1400px) {
-  .rounded-xxl-top-right {
-    border-top-right-radius: 1.5rem;
-  }
-}
-
-@media (min-width: 1400px) {
-  .rounded-xxl-bottom-right {
-    border-bottom-right-radius: 1.5rem;
-  }
-}
-
-@media (max-width: 1399px) {
   .rounded-xs-bottom-left {
     border-bottom-left-radius: 1.5rem;
   }
-}
-
-@media (max-width: 1399px) {
   .rounded-xs-bottom-right {
     border-bottom-right-radius: 1.5rem;
   }
