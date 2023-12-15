@@ -9,7 +9,7 @@ import {
 } from "../features/bookings/bookingsSlice";
 import LoadingSpinner from "../components/LoadingSpinner";
 
-export default function AdminPage() {
+export default function AdminBookingManagementPage() {
   const [filter, setFilter] = useState("cancelled");
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingButton, setIsLoadingButton] = useState(false);
@@ -74,7 +74,7 @@ export default function AdminPage() {
       : [];
 
   return (
-    <div>
+    <>
       <h1 className="my-4 ms-5">Admin Bookings Managament</h1>
       <Nav
         variant="pills"
@@ -270,6 +270,6 @@ export default function AdminPage() {
           <h3>No bookings found...</h3>
         </div>
       )}
-    </div>
+    </>
   );
 }

@@ -39,7 +39,7 @@ export const sendConfirmationEmail = createAsyncThunk(
   }
 );
 
-//AdminPage.jsx
+//AdminBookingManagementPage.jsx
 export const fetchBookings = createAsyncThunk(
   "bookings/fetchBookings",
   async () => {
@@ -48,7 +48,7 @@ export const fetchBookings = createAsyncThunk(
   }
 );
 
-//AdminPage.jsx
+//AdminBookingManagementPage.jsx
 export const cancelBooking = createAsyncThunk(
   "bookings/cancelBooking",
   async (booking_id) => {
@@ -59,7 +59,7 @@ export const cancelBooking = createAsyncThunk(
   }
 );
 
-//AdminPage.jsx
+//AdminBookingManagementPage.jsx
 export const reconfirmBooking = createAsyncThunk(
   "bookings/reconfirmBooking",
   async (booking_id) => {
@@ -70,7 +70,7 @@ export const reconfirmBooking = createAsyncThunk(
   }
 );
 
-//AdminPage.jsx
+//AdminBookingManagementPage.jsx
 export const deleteBooking = createAsyncThunk(
   "bookings/deleteBooking",
   async (booking_id) => {
@@ -134,6 +134,65 @@ export const updateProfileImage = createAsyncThunk(
   }
 );
 
+export const fetchRoomImages = createAsyncThunk(
+  "rooms/fetchRoomImages",
+  async (room_id) => {
+    try {
+      // Reference to the room's document in Firestore
+      const roomRef = doc(db, `rooms/${room_id}`);
+
+      // Fetch the room document
+      const roomSnap = await getDoc(roomRef);
+
+      // Extract the room data
+      const room = roomSnap.data();
+
+      if (room && room.roomImages) {
+        // Return the roomImages
+        return room.roomImages;
+      } else {
+        return [];
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+);
+
+export const updateRoomImages = createAsyncThunk(
+  "bookings/updateRoomImages",
+  async ({ room_id, files }) => {
+    try {
+      let imageUrls = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const imageRef = ref(storage, `rooms/${file.name}`); //where to store
+        const response = await uploadBytes(imageRef, file); //receive uploaded file data
+        const imageUrl = await getDownloadURL(response.ref); //receive uploaded file url
+        imageUrls.push(imageUrl);
+      }
+
+      // Reference to the room's document in Firestore
+      const roomRef = doc(db, `rooms/${room_id}`);
+      // Update the room's profile with the image URLs
+      await setDoc(roomRef, { roomImages: imageUrls }, { merge: true });
+
+      // Get the updated room data
+      const roomSnap = await getDoc(roomRef);
+      const room = {
+        id: roomSnap.id,
+        ...roomSnap.data(),
+      };
+
+      return room;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+);
+
 //Slice
 const bookingsSlice = createSlice({
   name: "bookings",
@@ -146,6 +205,7 @@ const bookingsSlice = createSlice({
     bookings: [],
     user: null,
     profileImage: null,
+    roomImages: [],
   },
   reducers: {},
 
@@ -215,6 +275,16 @@ const bookingsSlice = createSlice({
     builder.addCase(updateProfileImage.fulfilled, (state, action) => {
       state.user = action.payload;
       state.profileImage = action.payload.profileImage;
+    });
+
+    // fetchRoomImage
+    builder.addCase(fetchRoomImages.fulfilled, (state, action) => {
+      state.roomImages = action.payload;
+    });
+
+    //updateRoomImage
+    builder.addCase(updateRoomImages.fulfilled, (state, action) => {
+      state.roomImages = action.payload.roomImages;
     });
   },
 });

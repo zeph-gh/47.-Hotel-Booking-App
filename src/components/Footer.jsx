@@ -167,7 +167,7 @@ function Footer({ handleOpenModal }) {
             }}
             className="fw-bold text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
           >
-            Join now!<i className="fas fa-arrow-right"></i>
+            Join now!<i className="bi bi-arrow-right"></i>
           </Link>
         </div>
 

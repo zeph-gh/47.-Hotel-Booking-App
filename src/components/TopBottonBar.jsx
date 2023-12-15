@@ -13,13 +13,20 @@ import {
 import Footer from "./Footer";
 import defaultProfileImage from "../assets/defaultProfileImage.png";
 
-export default function TopBottonBar() {
+export default function TopBottonBar({ editMode, setEditMode }) {
   const auth = getAuth();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
+
   const { currentUser } = useContext(AuthContext);
+
   const [showModal, setShowModal] = useState(false);
+
+  const [profileImage, setProfileImage] = useState(defaultProfileImage);
+
+  const [navExpanded, setNavExpanded] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -39,6 +46,8 @@ export default function TopBottonBar() {
     setIsLoggedIn(false);
     navigate("/");
     dispatch(fetchRooms());
+    setProfileImage(defaultProfileImage);
+    setNavExpanded(false);
   };
 
   const handleOpenModal = () => {
@@ -51,13 +60,22 @@ export default function TopBottonBar() {
   };
 
   const dispatch = useDispatch();
-  const profileImage = useSelector((state) => state.bookings.profileImage);
+  const profileImageFromRedux = useSelector(
+    (state) => state.bookings.profileImage
+  );
+
+  const toggleEditMode = () => {
+    setEditMode(!editMode);
+  };
 
   useEffect(() => {
     if (currentUser) {
+      setProfileImage(profileImageFromRedux);
       dispatch(fetchProfileImage(currentUser.uid));
+      setNavExpanded(false);
+      setShowModal(false);
     }
-  }, [dispatch, currentUser]);
+  }, [dispatch, currentUser, profileImageFromRedux]);
 
   return (
     <>
@@ -65,6 +83,8 @@ export default function TopBottonBar() {
         bg="white"
         expand="none"
         sticky="top"
+        expanded={navExpanded}
+        onToggle={setNavExpanded}
         className="py-3 px-5 border-bottom"
       >
         <Navbar.Brand href="/">
@@ -79,25 +99,14 @@ export default function TopBottonBar() {
           ""
         )}
 
-        {location.pathname !== "/host" ? ( // no my trips button when /trips
-          <Link to="/host" className="ms-auto me-4">
-            <Button
-              variant="outline-light"
-              className="rounded-5 fw-medium text-dark py-2 px-3"
-            >
-              Switch to hosting
-            </Button>
-          </Link>
-        ) : null}
-
         <Navbar.Toggle
-          aria-controls="basic-navbar-nav"
+          aria-controls="navbar-option"
           className="px-3 pt-2 pb-0 border border-2 rounded-5"
         >
           <i className="bi bi-list fs-3 text-secondary"></i>
 
           <Image
-            src={profileImage || defaultProfileImage}
+            src={profileImage}
             style={{
               width: "38px",
               height: "38px",
@@ -108,56 +117,82 @@ export default function TopBottonBar() {
           />
         </Navbar.Toggle>
 
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse id="navbar-option">
           <Nav className="text-end border-top mt-3 pt-2">
-            {currentUser ? (
-              <p className="mt-3 me-2 fw-bold">
-                Welcome, {currentUser.email} {currentUser.phoneNumber}!
-              </p>
-            ) : (
-              ""
-            )}
+            <div className="custom-navbar-collapse">
+              {currentUser ? (
+                <p className="mt-3 me-2 fw-bold">
+                  Welcome, {currentUser.email} {currentUser.phoneNumber}!
+                </p>
+              ) : (
+                ""
+              )}
 
-            {isLoggedIn ? (
-              <>
-                {currentUser &&
-                currentUser.uid === "j2NA6g3BLgZlLt63kubtbEWSM4g2" &&
-                location.pathname !== "/admin" ? ( // no admin page button when /admin
-                  <Nav.Link
-                    as={Link}
-                    to="/admin"
-                    className="fw-medium text-primary fst-italic"
-                  >
-                    Admin Management
+              {isLoggedIn ? (
+                <>
+                  {currentUser &&
+                  currentUser.uid === "j2NA6g3BLgZlLt63kubtbEWSM4g2" &&
+                  location.pathname !== "/admin/bookings" ? (
+                    <Nav.Link
+                      as={Link}
+                      to="/admin/bookings"
+                      onClick={() => setNavExpanded(false)}
+                      className="fw-medium text-primary fst-italic"
+                    >
+                      Bookings Management
+                    </Nav.Link>
+                  ) : (
+                    ""
+                  )}
+
+                  {currentUser &&
+                  currentUser.uid === "j2NA6g3BLgZlLt63kubtbEWSM4g2" ? (
+                    <Nav.Link
+                      className={`fw-medium  fst-italic ${
+                        editMode ? "text-danger" : "text-primary"
+                      }`}
+                      onClick={toggleEditMode}
+                    >
+                      Rooms Management:{" "}
+                      <span>{`${editMode ? "ON" : "OFF"}`}</span>
+                    </Nav.Link>
+                  ) : (
+                    ""
+                  )}
+
+                  {location.pathname !== "/trips" ? ( // no my trips button when /trips
+                    <Nav.Link
+                      as={Link}
+                      to="/trips"
+                      onClick={() => setNavExpanded(false)}
+                    >
+                      Trips
+                    </Nav.Link>
+                  ) : null}
+
+                  {location.pathname !== "/profile" ? ( // no my trips button when /trips
+                    <Nav.Link
+                      as={Link}
+                      to="/profile"
+                      onClick={() => setNavExpanded(false)}
+                    >
+                      Profile
+                    </Nav.Link>
+                  ) : null}
+
+                  <Nav.Link className="mt-2" onClick={handleLogout}>
+                    <i className="bi bi-box-arrow-right me-2"></i>
+                    Sign Out
                   </Nav.Link>
-                ) : (
-                  ""
-                )}
-
-                {location.pathname !== "/trips" ? ( // no my trips button when /trips
-                  <Nav.Link as={Link} to="/trips">
-                    Trips
+                </>
+              ) : (
+                <>
+                  <Nav.Link className="mt-2" onClick={handleOpenModal}>
+                    Sign In / Sign Up
                   </Nav.Link>
-                ) : null}
-
-                {location.pathname !== "/profile" ? ( // no my trips button when /trips
-                  <Nav.Link as={Link} to="/profile">
-                    Profile
-                  </Nav.Link>
-                ) : null}
-
-                <Nav.Link className="mt-2" onClick={handleLogout}>
-                  <i className="bi bi-box-arrow-right me-2"></i>
-                  Sign Out
-                </Nav.Link>
-              </>
-            ) : (
-              <>
-                <Nav.Link className="mt-2" onClick={handleOpenModal}>
-                  Sign In / Sign Up
-                </Nav.Link>
-              </>
-            )}
+                </>
+              )}
+            </div>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

@@ -8,22 +8,29 @@ import RequireAuth from "./components/RequireAuth";
 import RoomPage from "./pages/RoomPage";
 import BookingPage from "./pages/BookingPage";
 import TripPage from "./pages/TripPage";
-import AdminPage from "./pages/AdminPage";
+import AdminBookingManagementPage from "./pages/AdminBookingManagementPage";
 import RequireAdminAuth from "./components/RequireAdminAuth";
 import "./App.css";
 import { Provider } from "react-redux";
 import store from "./store";
 import ProfilePage from "./pages/ProfilePage";
-import HostPage from "./pages/HostPage";
+import { useState } from "react";
 
 export default function App() {
+  const [editMode, setEditMode] = useState(false);
+
   return (
     <Provider store={store}>
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<TopBottonBar />}>
-              <Route index element={<HomePage />} />
+            <Route
+              path="/"
+              element={
+                <TopBottonBar editMode={editMode} setEditMode={setEditMode} />
+              }
+            >
+              <Route index element={<HomePage editMode={editMode} />} />
               <Route path="/login" element={<AuthPage />} />
               <Route path="*" element={<ErrorPage />} />
 
@@ -56,13 +63,11 @@ export default function App() {
                 }
               />
 
-              <Route path="/host" element={<HostPage />} />
-
               <Route
-                path="/admin"
+                path="/admin/bookings"
                 element={
                   <RequireAdminAuth>
-                    <AdminPage />
+                    <AdminBookingManagementPage />
                   </RequireAdminAuth>
                 }
               />
