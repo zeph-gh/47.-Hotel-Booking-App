@@ -9,11 +9,11 @@ import {
   Modal,
   Row,
 } from "react-bootstrap";
-import roomImages from "../components/roomImages";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRoomByRoomId } from "../features/bookings/bookingsSlice";
 import RoomMap from "../components/RoomMap";
 import LoadingSpinner from "../components/LoadingSpinner";
+import roomDefaultImages from "../components/roomDefaultImages";
 
 export default function RoomPage() {
   const { room_id } = useParams(); // get the room id from the URL
@@ -40,10 +40,6 @@ export default function RoomPage() {
 
   const [modalShow, setModalShow] = useState(false);
   const [modalImage, setModalImage] = useState("");
-
-  useEffect(() => {
-    dispatch(fetchRoomByRoomId(room_id));
-  }, [room_id, dispatch]);
 
   const handleCheckInDateChange = (event) => {
     const selectedDate = new Date(event.target.value);
@@ -99,7 +95,7 @@ export default function RoomPage() {
         room_name: room.room_name,
         room_type: room.room_type,
         room_location: room.room_location,
-        room_image: roomImages[room.room_id][0],
+        room_image: displayImages[0],
         totalPrice,
         diffDays,
         checkInDate: checkInDate.toISOString(),
@@ -110,12 +106,20 @@ export default function RoomPage() {
     setErrorMessage("");
   };
 
-  const images = roomImages[room_id];
+  const roomImages = useSelector((state) => state.bookings.roomImages);
+
+  const displayImages = roomImages[room.room_id]
+    ? roomImages[room.room_id]
+    : roomDefaultImages;
 
   const handleImageClick = (image) => {
     setModalImage(image);
     setModalShow(true);
   };
+
+  useEffect(() => {
+    dispatch(fetchRoomByRoomId(room_id));
+  }, [room_id, dispatch]);
 
   return (
     <>
@@ -123,19 +127,21 @@ export default function RoomPage() {
         <LoadingSpinner />
       ) : (
         <div className="py-4 mx-md-4 px-md-5 mx-1 px-1">
-          <h1 className="my-3 ms-3">{room.room_name}</h1>
+          <h1 className="my-3 ms-3">
+            {room.room_id}. {room.room_name}
+          </h1>
 
           <div className="d-none d-lg-block">
             <Row>
               <Col xs={6} className="mt-4">
                 <Image
-                  src={images[0]}
+                  src={displayImages[0]}
                   alt={room.room_type}
                   height="560px"
                   width="100%"
                   className="rounded-xs-bottom-left rounded-xs-top-left"
                   fluid
-                  onClick={() => handleImageClick(images[0])}
+                  onClick={() => handleImageClick(displayImages[0])}
                 />
               </Col>
 
@@ -143,24 +149,24 @@ export default function RoomPage() {
                 <Row>
                   <Col xs={6}>
                     <Image
-                      src={images[1]}
+                      src={displayImages[1]}
                       alt={room.room_type}
                       height="280px"
                       width="100%"
                       fluid
-                      onClick={() => handleImageClick(images[1])}
+                      onClick={() => handleImageClick(displayImages[1])}
                     />
                   </Col>
 
                   <Col xs={6}>
                     <Image
-                      src={images[2]}
+                      src={displayImages[2]}
                       alt={room.room_type}
                       height="280px"
                       width="100%"
                       className="rounded-xs-top-right"
                       fluid
-                      onClick={() => handleImageClick(images[2])}
+                      onClick={() => handleImageClick(displayImages[2])}
                     />
                   </Col>
                 </Row>
@@ -168,25 +174,25 @@ export default function RoomPage() {
                 <Row>
                   <Col xs={6}>
                     <Image
-                      src={images[0]}
+                      src={displayImages[3]}
                       alt={room.room_type}
                       height="280px"
                       width="100%"
                       className="mt-4 "
                       fluid
-                      onClick={() => handleImageClick(images[0])}
+                      onClick={() => handleImageClick(displayImages[0])}
                     />
                   </Col>
 
                   <Col xs={6}>
                     <Image
-                      src={images[1]}
+                      src={displayImages[4]}
                       alt={room.room_type}
                       height="280px"
                       width="100%"
                       className="mt-4 rounded-xs-bottom-right"
                       fluid
-                      onClick={() => handleImageClick(images[1])}
+                      onClick={() => handleImageClick(displayImages[1])}
                     />
                   </Col>
                 </Row>
@@ -202,7 +208,7 @@ export default function RoomPage() {
 
           <div className="d-block d-lg-none mt-5 ">
             <Carousel interval={null} className="h-100 w-100">
-              {images.map((image, index) => (
+              {displayImages.map((image, index) => (
                 <Carousel.Item key={index}>
                   <Image
                     src={image}

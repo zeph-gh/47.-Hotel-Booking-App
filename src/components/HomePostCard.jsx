@@ -5,17 +5,16 @@ import {
   fetchRoomImages,
   updateRoomImages,
 } from "../features/bookings/bookingsSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from "react";
-import roomImages from "./roomImages";
+import roomDefaultImages from "./roomDefaultImages";
 
-export default function HomePostCard({ room, editMode }) {
+export default function HomePostCard({ room, roomImages, editMode }) {
   const [showModal, setShowModal] = useState(false);
 
-  const images = useSelector((state) => state.bookings.roomImages);
-  const displayImages = images.length > 0 ? images : roomImages[room.room_id];
-
-  console.log(images);
+  const displayImages = roomImages[room.room_id]
+    ? roomImages[room.room_id]
+    : roomDefaultImages;
 
   const dispatch = useDispatch();
 
@@ -34,13 +33,14 @@ export default function HomePostCard({ room, editMode }) {
 
   const handleUploadFile = (event) => {
     const files = Array.from(event.target.files);
-    if (files.length > 5) {
-      alert("You can only upload a maximum of 5 images.");
+    if (files.length !== 5) {
+      alert("You can only upload 5 images.");
       return;
     }
-    console.log(files);
 
-    dispatch(updateRoomImages({ room_id: room.room_id, files }));
+    dispatch(updateRoomImages({ room_id: room.room_id, files })).then(() =>
+      dispatch(fetchRoomImages(room.room_id))
+    );
   };
 
   useEffect(() => {
@@ -53,13 +53,13 @@ export default function HomePostCard({ room, editMode }) {
         {room.availability ? (
           <>
             <div style={{ position: "relative" }}>
-              <Link
-                to={`/room/${room.room_id}`}
-                style={{ textDecoration: "none", color: "black" }}
-              >
-                <Carousel interval={null} style={{ width: "100%" }}>
-                  {displayImages.map((image, index) => (
-                    <Carousel.Item key={index}>
+              <Carousel interval={3000} style={{ width: "100%" }}>
+                {displayImages.map((image, index) => (
+                  <Carousel.Item key={index}>
+                    <Link
+                      to={`/room/${room.room_id}`}
+                      style={{ textDecoration: "none", color: "black" }}
+                    >
                       <Image
                         src={image}
                         alt={room.room_name}
@@ -67,10 +67,10 @@ export default function HomePostCard({ room, editMode }) {
                         height="100%"
                         width="100%"
                       />
-                    </Carousel.Item>
-                  ))}
-                </Carousel>
-              </Link>
+                    </Link>
+                  </Carousel.Item>
+                ))}
+              </Carousel>
 
               {editMode && (
                 <div
@@ -89,7 +89,9 @@ export default function HomePostCard({ room, editMode }) {
               )}
             </div>
 
-            <p className="mt-2 mb-0 fw-bold fs-6">{room.room_name}</p>
+            <p className="mt-2 mb-0 fw-bold fs-6">
+              {room.room_id}. {room.room_name}
+            </p>
             <p className="m-0 fw-light">{room.room_type}</p>
             <p className="m-0 fw-light">
               <strong>${room.price}</strong> night
@@ -98,17 +100,24 @@ export default function HomePostCard({ room, editMode }) {
         ) : (
           <div>
             <div style={{ position: "relative" }}>
-              <Image
-                src={images[0] || roomImages[room.room_id][0]}
-                alt={room.room_name}
-                className="rounded-4"
-                style={{
-                  filter: "grayscale(100%)",
-                  objectFit: "cover",
-                  height: "100%",
-                  width: "100%",
-                }}
-              />
+              <Carousel interval={3000} style={{ width: "100%" }}>
+                {displayImages.map((image, index) => (
+                  <Carousel.Item key={index}>
+                    <Image
+                      src={image}
+                      alt={room.room_name}
+                      className="rounded-4"
+                      style={{
+                        filter: "grayscale(100%)",
+                        objectFit: "cover",
+                        height: "100%",
+                        width: "100%",
+                      }}
+                    />
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+
               <div
                 style={{
                   position: "absolute",
@@ -124,9 +133,21 @@ export default function HomePostCard({ room, editMode }) {
                 }}
               >
                 <div
+                  className="d-none d-sm-block fs-1"
                   style={{
                     color: "#ff385c",
-                    fontSize: "3em",
+
+                    fontWeight: "bold",
+                    transform: "rotate(46deg)",
+                  }}
+                >
+                  Booked
+                </div>
+                <div
+                  className="d-block d-sm-none fs-6"
+                  style={{
+                    color: "#ff385c",
+
                     fontWeight: "bold",
                     transform: "rotate(46deg)",
                   }}
@@ -151,7 +172,9 @@ export default function HomePostCard({ room, editMode }) {
                 </div>
               )}
             </div>
-            <p className="mt-2 mb-0 fw-bold fs-6">{room.room_name}</p>
+            <p className="mt-2 mb-0 fw-bold fs-6">
+              {room.room_id}. {room.room_name}
+            </p>
             <p className="m-0 fw-light">{room.room_type}</p>
             <p className="m-0 fw-light">
               <strong>${room.price}</strong> night
@@ -160,15 +183,10 @@ export default function HomePostCard({ room, editMode }) {
         )}
       </Col>
 
-      <Modal
-        show={showModal}
-        onHide={handleCloseModal}
-        animation={false}
-        centered
-      >
+      <Modal show={showModal} onHide={handleCloseModal} centered size="sm">
         <Modal.Body>
-          <div>
-            image
+          <div className="text-center">
+            <p>Only upload 5 images.</p>
             <Button variant="light" className="px-3" onClick={handleShowFile}>
               <i className="bi bi-upload"></i>
             </Button>

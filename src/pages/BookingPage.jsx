@@ -125,7 +125,9 @@ export default function BookingPage() {
               <Image src={room_image} alt={room_type} fluid />
             </Col>
             <Col xs={7}>
-              <h5>{room_name}</h5>
+              <h5>
+                {room_id}. {room_name}
+              </h5>
               <p>Type: {room_type}</p>
               <p>Location: {room_location}</p>
             </Col>

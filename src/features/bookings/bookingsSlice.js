@@ -134,6 +134,7 @@ export const updateProfileImage = createAsyncThunk(
   }
 );
 
+// HomePage.jsx
 export const fetchRoomImages = createAsyncThunk(
   "rooms/fetchRoomImages",
   async (room_id) => {
@@ -148,8 +149,9 @@ export const fetchRoomImages = createAsyncThunk(
       const room = roomSnap.data();
 
       if (room && room.roomImages) {
-        // Return the roomImages
-        return room.roomImages;
+        console.log(room_id, room.roomImages);
+        // Return an object where the room ID is the key and the roomImages is the value
+        return { [roomSnap.id]: room.roomImages };
       } else {
         return [];
       }
@@ -160,6 +162,7 @@ export const fetchRoomImages = createAsyncThunk(
   }
 );
 
+// HomePage.jsx
 export const updateRoomImages = createAsyncThunk(
   "bookings/updateRoomImages",
   async ({ room_id, files }) => {
@@ -180,16 +183,42 @@ export const updateRoomImages = createAsyncThunk(
 
       // Get the updated room data
       const roomSnap = await getDoc(roomRef);
-      const room = {
-        id: roomSnap.id,
+      const roomImage = {
+        room_id: roomSnap.id,
         ...roomSnap.data(),
       };
-
-      return room;
+      return roomImage;
     } catch (error) {
       console.error(error);
       throw error;
     }
+  }
+);
+
+// HomePage.jsx
+export const createNewRoom = createAsyncThunk(
+  "bookings/createNewRoom",
+  async (roomData) => {
+    const response = await axios.post(`${BASE_URL}/rooms`, roomData);
+    return response.data;
+  }
+);
+
+//HomePage.jsx
+export const editRoom = createAsyncThunk(
+  "bookings/editRoom",
+  async (room_id, roomData) => {
+    const response = await axios.put(`${BASE_URL}/rooms/${room_id}`, roomData);
+    return response.data;
+  }
+);
+
+//HomePage.jsx
+export const deleteRoom = createAsyncThunk(
+  "bookings/deleteRoom",
+  async (room_id) => {
+    const response = await axios.delete(`${BASE_URL}/rooms/${room_id}`);
+    return response.data;
   }
 );
 
@@ -205,7 +234,7 @@ const bookingsSlice = createSlice({
     bookings: [],
     user: null,
     profileImage: null,
-    roomImages: [],
+    roomImages: {},
   },
   reducers: {},
 
@@ -220,6 +249,7 @@ const bookingsSlice = createSlice({
     builder.addCase(fetchRoomByRoomId.fulfilled, (state, action) => {
       state.room = action.payload;
       state.loading = false;
+      console.log(state.room);
     });
 
     //confirmBooking
@@ -277,14 +307,36 @@ const bookingsSlice = createSlice({
       state.profileImage = action.payload.profileImage;
     });
 
-    // fetchRoomImage
+    // fetchRoomsImages
     builder.addCase(fetchRoomImages.fulfilled, (state, action) => {
+      state.roomImages = { ...state.roomImages, ...action.payload };
+    });
+
+    //updateRoomImages
+    builder.addCase(updateRoomImages.fulfilled, (state, action) => {
       state.roomImages = action.payload;
     });
 
-    //updateRoomImage
-    builder.addCase(updateRoomImages.fulfilled, (state, action) => {
-      state.roomImages = action.payload.roomImages;
+    // createNewRoom
+    builder.addCase(createNewRoom.fulfilled, (state, action) => {
+      state.rooms.push(action.payload);
+    });
+
+    // editRoom
+    builder.addCase(editRoom.fulfilled, (state, action) => {
+      const index = state.rooms.findIndex(
+        (room) => room.room_id === action.payload.room_id
+      );
+      if (index !== -1) {
+        state.rooms[index] = action.payload;
+      }
+    });
+
+    // deleteRoom
+    builder.addCase(deleteRoom.fulfilled, (state, action) => {
+      state.rooms = state.rooms.filter(
+        (room) => room.room_id !== action.payload.room_id
+      );
     });
   },
 });

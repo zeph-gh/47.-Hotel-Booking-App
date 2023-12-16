@@ -8,7 +8,10 @@ import { Row } from "react-bootstrap";
 export default function HomePage({ editMode }) {
   const loading = useSelector((state) => state.bookings.loading);
   const rooms = useSelector((state) => state.bookings.rooms);
+  const roomImages = useSelector((state) => state.bookings.roomImages);
   const dispatch = useDispatch();
+
+  const sortedRooms = [...rooms].sort((a, b) => a.room_id - b.room_id);
 
   useEffect(() => {
     dispatch(fetchRooms());
@@ -23,10 +26,11 @@ export default function HomePage({ editMode }) {
           {rooms.length > 0 ? (
             <>
               <Row>
-                {rooms.map((room) => (
+                {sortedRooms.map((room) => (
                   <HomePostCard
                     key={room.room_id}
                     room={room}
+                    roomImages={roomImages}
                     editMode={editMode}
                   />
                 ))}

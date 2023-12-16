@@ -66,6 +66,7 @@ export default function TopBottonBar({ editMode, setEditMode }) {
 
   const toggleEditMode = () => {
     setEditMode(!editMode);
+    setNavExpanded(false);
   };
 
   useEffect(() => {
