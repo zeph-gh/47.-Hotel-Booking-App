@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import HomePostCard from "../components/HomePostCard";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { Row } from "react-bootstrap";
+import AddRoom from "../components/AddRoom";
 
 export default function HomePage({ editMode }) {
   const loading = useSelector((state) => state.bookings.loading);
@@ -23,6 +24,8 @@ export default function HomePage({ editMode }) {
         <LoadingSpinner />
       ) : (
         <div className="mx-5 mb-5 p-5">
+          {editMode ? <AddRoom /> : ""}
+
           {rooms.length > 0 ? (
             <>
               <Row>

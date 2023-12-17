@@ -214,15 +214,6 @@ export const updateRoomImages = createAsyncThunk(
   }
 );
 
-// HomePage.jsx
-export const createNewRoom = createAsyncThunk(
-  "bookings/createNewRoom",
-  async (roomData) => {
-    const response = await axios.post(`${BASE_URL}/rooms`, roomData);
-    return response.data;
-  }
-);
-
 //HomePage.jsx
 export const editRoom = createAsyncThunk(
   "bookings/editRoom",
@@ -241,6 +232,20 @@ export const deleteRoom = createAsyncThunk(
   async (room_id) => {
     const response = await axios.delete(`${BASE_URL}/rooms/${room_id}`);
     return response.data;
+  }
+);
+
+//HomePage.jsx
+export const addRoom = createAsyncThunk(
+  "bookings/addRoom",
+  async (roomDetails) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/rooms`, roomDetails);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 );
 
@@ -356,11 +361,6 @@ const bookingsSlice = createSlice({
       state.roomImages = { ...state.roomImages, ...action.payload };
     });
 
-    // createNewRoom
-    builder.addCase(createNewRoom.fulfilled, (state, action) => {
-      state.rooms.push(action.payload);
-    });
-
     // editRoom
     builder.addCase(editRoom.fulfilled, (state, action) => {
       const index = state.rooms.findIndex(
@@ -376,6 +376,11 @@ const bookingsSlice = createSlice({
       state.rooms = state.rooms.filter(
         (room) => room.room_id !== action.payload.room_id
       );
+    });
+
+    // addRoom
+    builder.addCase(addRoom.fulfilled, (state, action) => {
+      state.rooms.push(action.payload);
     });
   },
 });

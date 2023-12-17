@@ -18,6 +18,11 @@
   color: rgb(69, 69, 69);
 }
 
+p {
+  max-width: 100%;
+  word-wrap: break-word;
+}
+
 i {
   color: rgb(69, 69, 69);
 }

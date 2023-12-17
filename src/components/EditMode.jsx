@@ -61,21 +61,23 @@ export default function EditMode({
   const handleInputChange = (event) => {
     let { name, value } = event.target;
 
-    // for generate a real boolean not string true false
+    // Convert availability to boolean
     if (name === "availability") {
       value = value === "true" ? true : false;
     }
 
-    setRoomDetails({
-      ...roomDetails,
+    setRoomDetails((prevRoomDetails) => ({
+      ...prevRoomDetails,
       [name]: value,
-    });
+    }));
   };
 
   const handleEditRoom = (event) => {
     event.preventDefault();
+
     handleCloseModalEdit();
     handleCloseModal();
+
     dispatch(editRoom({ room_id: room.room_id, roomDetails: roomDetails }))
       .then(toast.success("Success to edit room's details by admin."))
       .catch((error) => {
@@ -86,7 +88,9 @@ export default function EditMode({
 
   const handleDeleteRoom = (event) => {
     event.preventDefault();
+
     handleCloseModal();
+
     dispatch(deleteRoom(room.room_id))
       .then(() => {
         toast.success("Success to delete room by admin.");
@@ -101,8 +105,16 @@ export default function EditMode({
   return (
     <>
       <div
-        className="shake"
-        style={{ position: "absolute", top: 10, right: 110 }}
+        className="shake mt-3"
+        style={{
+          position: "absolute",
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+          left: 0,
+          top: 0,
+          right: 0,
+        }}
       >
         <Button
           variant="warning"
@@ -192,6 +204,10 @@ export default function EditMode({
                     name="room_name"
                     value={roomDetails.room_name}
                     onChange={handleInputChange}
+                    placeholder="The Skytop"
+                    minLength="1"
+                    maxLength="20"
+                    required
                   />
                 </Form.Group>
 
@@ -202,6 +218,10 @@ export default function EditMode({
                     name="room_type"
                     value={roomDetails.room_type}
                     onChange={handleInputChange}
+                    placeholder="Heaven view"
+                    minLength="1"
+                    maxLength="20"
+                    required
                   />
                 </Form.Group>
 
@@ -212,6 +232,8 @@ export default function EditMode({
                     name="price"
                     value={roomDetails.price}
                     onChange={handleInputChange}
+                    placeholder="99.99"
+                    required
                   />
                 </Form.Group>
 
@@ -234,6 +256,10 @@ export default function EditMode({
                     name="room_location"
                     value={roomDetails.room_location}
                     onChange={handleInputChange}
+                    placeholder="Heaven"
+                    minLength="1"
+                    maxLength="20"
+                    required
                   />
                 </Form.Group>
 
@@ -244,6 +270,10 @@ export default function EditMode({
                     name="latitude"
                     value={roomDetails.latitude}
                     onChange={handleInputChange}
+                    placeholder="-90 to 90"
+                    min="-90"
+                    max="90"
+                    required
                   />
                 </Form.Group>
 
@@ -254,10 +284,18 @@ export default function EditMode({
                     name="longitude"
                     value={roomDetails.longitude}
                     onChange={handleInputChange}
+                    placeholder="-180 to 180"
+                    min="-180"
+                    max="180"
+                    required
                   />
                 </Form.Group>
 
-                <Button variant="primary" type="submit">
+                <Button
+                  variant="warning"
+                  type="submit"
+                  className="px-3 mt-3 w-100"
+                >
                   Submit
                 </Button>
               </Form>
