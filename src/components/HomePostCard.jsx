@@ -1,13 +1,11 @@
-import { Button, Carousel, Col, Image, Modal } from "react-bootstrap";
+import { Carousel, Col, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-import {
-  fetchRoomImages,
-  updateRoomImages,
-} from "../features/bookings/bookingsSlice";
+import { fetchRoomImages } from "../features/bookings/bookingsSlice";
 import { useDispatch } from "react-redux";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import roomDefaultImages from "./roomDefaultImages";
+import EditMode from "./EditMode";
 
 export default function HomePostCard({ room, roomImages, editMode }) {
   const [showModal, setShowModal] = useState(false);
@@ -18,29 +16,11 @@ export default function HomePostCard({ room, roomImages, editMode }) {
 
   const dispatch = useDispatch();
 
-  const fileInput = useRef();
-
   const handleOpenModal = () => {
     setShowModal(true);
   };
   const handleCloseModal = () => {
     setShowModal(false);
-  };
-
-  const handleShowFile = () => {
-    fileInput.current.click();
-  };
-
-  const handleUploadFile = (event) => {
-    const files = Array.from(event.target.files);
-    if (files.length !== 5) {
-      alert("You can only upload 5 images.");
-      return;
-    }
-
-    dispatch(updateRoomImages({ room_id: room.room_id, files })).then(() =>
-      dispatch(fetchRoomImages(room.room_id))
-    );
   };
 
   useEffect(() => {
@@ -73,19 +53,12 @@ export default function HomePostCard({ room, roomImages, editMode }) {
               </Carousel>
 
               {editMode && (
-                <div
-                  className="shake"
-                  style={{ position: "absolute", top: 10, right: 110 }}
-                >
-                  <Button
-                    variant="warning"
-                    className="rounded-4 px-3"
-                    onClick={handleOpenModal}
-                  >
-                    <i className="bi bi-gear-fill"></i>
-                    <span className="ms-2 fw-medium">Edit</span>
-                  </Button>
-                </div>
+                <EditMode
+                  room={room}
+                  handleOpenModal={handleOpenModal}
+                  handleCloseModal={handleCloseModal}
+                  showModal={showModal}
+                />
               )}
             </div>
 
@@ -157,19 +130,12 @@ export default function HomePostCard({ room, roomImages, editMode }) {
               </div>
 
               {editMode && (
-                <div
-                  className="shake"
-                  style={{ position: "absolute", top: 10, right: 110 }}
-                >
-                  <Button
-                    variant="warning"
-                    className="rounded-4 px-3"
-                    onClick={handleOpenModal}
-                  >
-                    <i className="bi bi-gear-fill"></i>
-                    <span className="ms-2 fw-medium">Edit</span>
-                  </Button>
-                </div>
+                <EditMode
+                  room={room}
+                  handleOpenModal={handleOpenModal}
+                  handleCloseModal={handleCloseModal}
+                  showModal={showModal}
+                />
               )}
             </div>
             <p className="mt-2 mb-0 fw-bold fs-6">
@@ -182,24 +148,6 @@ export default function HomePostCard({ room, roomImages, editMode }) {
           </div>
         )}
       </Col>
-
-      <Modal show={showModal} onHide={handleCloseModal} centered size="sm">
-        <Modal.Body>
-          <div className="text-center">
-            <p>Only upload 5 images.</p>
-            <Button variant="light" className="px-3" onClick={handleShowFile}>
-              <i className="bi bi-upload"></i>
-            </Button>
-          </div>
-          <input
-            type="file"
-            ref={fileInput}
-            onChange={handleUploadFile}
-            multiple
-            style={{ display: "none" }}
-          />
-        </Modal.Body>
-      </Modal>
     </>
   );
 }

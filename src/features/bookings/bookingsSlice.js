@@ -79,6 +79,26 @@ export const deleteBooking = createAsyncThunk(
   }
 );
 
+//TripPage.jsx
+export const fetchTrips = createAsyncThunk(
+  "bookings/fetchTrips",
+  async (user_id) => {
+    const response = await fetch(`${BASE_URL}/trips/${user_id}`);
+    return response.json();
+  }
+);
+
+//TripPage.jsx
+export const cancelTrip = createAsyncThunk(
+  "bookings/cancelTrip",
+  async (trip_id) => {
+    const response = await axios.put(`${BASE_URL}/trips/${trip_id}`, {
+      status: "cancelled",
+    });
+    return response.data;
+  }
+);
+
 //ProfilePage.jsx
 export const fetchProfileImage = createAsyncThunk(
   "bookings/fetchProfileImage",
@@ -149,7 +169,6 @@ export const fetchRoomImages = createAsyncThunk(
       const room = roomSnap.data();
 
       if (room && room.roomImages) {
-        console.log(room_id, room.roomImages);
         // Return an object where the room ID is the key and the roomImages is the value
         return { [roomSnap.id]: room.roomImages };
       } else {
@@ -207,8 +226,11 @@ export const createNewRoom = createAsyncThunk(
 //HomePage.jsx
 export const editRoom = createAsyncThunk(
   "bookings/editRoom",
-  async (room_id, roomData) => {
-    const response = await axios.put(`${BASE_URL}/rooms/${room_id}`, roomData);
+  async ({ room_id, roomDetails }) => {
+    const response = await axios.put(
+      `${BASE_URL}/rooms/${room_id}`,
+      roomDetails
+    );
     return response.data;
   }
 );
@@ -232,6 +254,7 @@ const bookingsSlice = createSlice({
     booking: [],
     email: [],
     bookings: [],
+    trips: [],
     user: null,
     profileImage: null,
     roomImages: {},
@@ -249,7 +272,6 @@ const bookingsSlice = createSlice({
     builder.addCase(fetchRoomByRoomId.fulfilled, (state, action) => {
       state.room = action.payload;
       state.loading = false;
-      console.log(state.room);
     });
 
     //confirmBooking
@@ -296,6 +318,23 @@ const bookingsSlice = createSlice({
       );
     });
 
+    //fetchTrips
+    builder.addCase(fetchTrips.fulfilled, (state, action) => {
+      state.trips = action.payload;
+    });
+
+    //cancelTrip
+    builder.addCase(cancelTrip.fulfilled, (state, action) => {
+      // Find the trip with the same id as the cancelled trip
+      const index = state.trips.findIndex(
+        (trip) => trip.trip_id === action.payload.booking_id
+      );
+      // Update the trip status to 'cancelled'
+      if (index !== -1) {
+        state.trips[index].status = "cancelled";
+      }
+    });
+
     // fetchProfileImage
     builder.addCase(fetchProfileImage.fulfilled, (state, action) => {
       state.profileImage = action.payload;
@@ -314,7 +353,7 @@ const bookingsSlice = createSlice({
 
     //updateRoomImages
     builder.addCase(updateRoomImages.fulfilled, (state, action) => {
-      state.roomImages = action.payload;
+      state.roomImages = { ...state.roomImages, ...action.payload };
     });
 
     // createNewRoom

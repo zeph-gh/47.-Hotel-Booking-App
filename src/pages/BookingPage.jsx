@@ -8,6 +8,7 @@ import {
   sendConfirmationEmail,
 } from "../features/bookings/bookingsSlice";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { toast } from "react-toastify";
 
 export default function BookingPage() {
   const location = useLocation();
@@ -52,7 +53,7 @@ export default function BookingPage() {
 
     try {
       dispatch(confirmBooking(bookingData));
-      alert("Booking confirmed!");
+      toast.success("Booking confirmed!");
 
       const emailData = {
         to: currentUser.email,
@@ -63,7 +64,7 @@ export default function BookingPage() {
       dispatch(sendConfirmationEmail(emailData));
       console.log("Email sent successfully");
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
     }
 
     setIsLoading(false);

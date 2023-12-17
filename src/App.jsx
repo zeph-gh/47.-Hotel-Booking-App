@@ -15,6 +15,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 import ProfilePage from "./pages/ProfilePage";
 import { useState } from "react";
+import { ToastContainer } from "react-toastify";
 
 export default function App() {
   const [editMode, setEditMode] = useState(false);
@@ -73,6 +74,7 @@ export default function App() {
               />
             </Route>
           </Routes>
+          <ToastContainer />
         </BrowserRouter>
       </AuthProvider>
     </Provider>
