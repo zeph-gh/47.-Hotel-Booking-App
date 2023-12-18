@@ -21,7 +21,9 @@ export default function HomePage({ editMode }) {
   return (
     <>
       {loading ? (
-        <LoadingSpinner />
+        <div className="my-5">
+          <LoadingSpinner />
+        </div>
       ) : (
         <div className="mx-5 mb-5 p-5">
           {editMode ? <AddRoom /> : ""}

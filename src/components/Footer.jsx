@@ -32,127 +32,67 @@ function Footer({ handleOpenModal }) {
         <div className="d-none d-lg-block col-md-2"></div>
 
         <div className="d-none d-lg-block col-md-2">
-          <a href="#" className="fw-bold icon">
-            HOSTING
-          </a>
-          <a
-            href="#"
-            className="d-block pt-4 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="fw-bold icon">HOSTING</a>
+          <a className="d-block pt-4 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             Hosting your home
           </a>
-          <a
-            href="#"
-            className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             AirCover for Hosts
           </a>
-          <a
-            href="#"
-            className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             Hosting resources
           </a>
-          <a
-            href="#"
-            className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             Community forum
           </a>
-          <a
-            href="#"
-            className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             Hosting responsibly
           </a>
-          <a
-            href="#"
-            className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             Airbnb-friendly apartments
           </a>
         </div>
 
         <div className="d-none d-lg-block col-md-2">
-          <a href="#" className="fw-bold icon">
-            CORPORATE INFO
-          </a>
-          <a
-            href="#"
-            className="d-block pt-4 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="fw-bold icon">CORPORATE INFO</a>
+          <a className="d-block pt-4 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             Career
           </a>
-          <a
-            href="#"
-            className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             About us
           </a>
-          <a
-            href="#"
-            className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             Sustainability
           </a>
-          <a
-            href="#"
-            className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             Press
           </a>
-          <a
-            href="#"
-            className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             Investor
           </a>
-          <a
-            href="#"
-            className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             Relations
           </a>
-          <a
-            href="#"
-            className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             Corporate governance
           </a>
         </div>
 
         <div className="d-none d-lg-block col-md-2">
-          <a href="#" className="icon fw-bold">
-            SUPPORT
-          </a>
-          <a
-            href="#"
-            className="d-block pt-4 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="icon fw-bold">SUPPORT</a>
+          <a className="d-block pt-4 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             Help Center
           </a>
-          <a
-            href="#"
-            className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             Get help with a safety issue
           </a>
-          <a
-            href="#"
-            className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             AirCover
           </a>
-          <a
-            href="#"
-            className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             Anti-discrimination
           </a>
-          <a
-            href="#"
-            className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
+          <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
             Disability support
           </a>
         </div>
@@ -185,40 +125,22 @@ function Footer({ handleOpenModal }) {
           </a>
           <Collapse in={openHosting}>
             <div className="mb-4">
-              <a
-                href="#"
-                className="d-block pt-4 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-4 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 Hosting your home
               </a>
-              <a
-                href="#"
-                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 AirCover for Hosts
               </a>
-              <a
-                href="#"
-                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 Hosting resources
               </a>
-              <a
-                href="#"
-                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 Community forum
               </a>
-              <a
-                href="#"
-                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 Hosting responsibly
               </a>
-              <a
-                href="#"
-                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 Airbnb-friendly apartments
               </a>
             </div>
@@ -235,46 +157,25 @@ function Footer({ handleOpenModal }) {
           </a>
           <Collapse in={openCorpInfo}>
             <div className="mb-4">
-              <a
-                href="#"
-                className="d-block pt-4 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-4 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 Career
               </a>
-              <a
-                href="#"
-                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 About us
               </a>
-              <a
-                href="#"
-                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 Sustainability
               </a>
-              <a
-                href="#"
-                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 Press
               </a>
-              <a
-                href="#"
-                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 Investor
               </a>
-              <a
-                href="#"
-                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 Relations
               </a>
-              <a
-                href="#"
-                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 Corporate governance
               </a>
             </div>
@@ -291,34 +192,19 @@ function Footer({ handleOpenModal }) {
           </a>
           <Collapse in={openSupport}>
             <div className="mb-5">
-              <a
-                href="#"
-                className="d-block pt-4 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-4 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 Help Center
               </a>
-              <a
-                href="#"
-                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 Get help with a safety issue
               </a>
-              <a
-                href="#"
-                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 AirCover
               </a>
-              <a
-                href="#"
-                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 Anti-discrimination
               </a>
-              <a
-                href="#"
-                className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-              >
+              <a className="d-block pt-3 text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark">
                 Disability support
               </a>
             </div>

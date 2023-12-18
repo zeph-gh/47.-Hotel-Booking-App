@@ -28,14 +28,19 @@ export default function TripPage() {
       : [];
 
   useEffect(() => {
-    dispatch(fetchTrips(currentUser.uid));
-    setIsLoading(false);
+    setIsLoading(true);
+    dispatch(fetchTrips(currentUser.uid)).then(() => {
+      setIsLoading(false);
+    });
   }, [dispatch, currentUser.uid]);
 
   return (
     <div>
+      <h1 className="my-4 ms-5">Your Trips</h1>
       {isLoading ? (
-        <LoadingSpinner />
+        <div className="my-5">
+          <LoadingSpinner />
+        </div>
       ) : filteredTrips.length > 0 ? (
         <TripTable
           filteredTrips={filteredTrips}
@@ -51,16 +56,19 @@ export default function TripPage() {
           >
             <i className="bi bi-arrow-90deg-left"></i>
           </Button>
+
           <h3 className="mt-4">
             {filter === "confirmed"
               ? "No trips booked...yet!"
               : "No trips cancelled!"}
           </h3>
+
           <p>
             {filter === "confirmed"
               ? "Time to dust off your bags and start planning your next adventure"
               : "Enjoy Your Trip!"}
           </p>
+
           <Button
             variant="light"
             className="border-dark rounded-3 px-5 py-2 mt-3"

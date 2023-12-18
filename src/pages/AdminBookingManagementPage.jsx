@@ -13,33 +13,45 @@ export default function AdminBookingManagementPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchBookings());
-    setIsLoading(false);
+    setIsLoading(true);
+    dispatch(fetchBookings()).then(() => {
+      setIsLoading(false);
+    });
   }, [dispatch]);
 
   return (
     <>
       <h1 className="my-4 ms-5">Admin Bookings Managament</h1>
       <Nav
-        variant="pills"
+        variant="tabs"
         defaultActiveKey="cancelled"
         justify
         className="mt-5 fw-bold"
       >
         <Nav.Item>
-          <Nav.Link eventKey="confirmed" onClick={() => setFilter("confirmed")}>
+          <Nav.Link
+            className="custom-nav-link"
+            eventKey="confirmed"
+            onClick={() => setFilter("confirmed")}
+          >
             Confirmed
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="cancelled" onClick={() => setFilter("cancelled")}>
+          <Nav.Link
+            className="custom-nav-link"
+            eventKey="cancelled"
+            onClick={() => setFilter("cancelled")}
+          >
             Cancelled
           </Nav.Link>
         </Nav.Item>
       </Nav>
 
       {isLoading ? (
-        <LoadingSpinner />
+        <div className="my-5">
+          <LoadingSpinner />
+        </div>
       ) : (
         <AdminBookingManagementTable filter={filter} />
       )}

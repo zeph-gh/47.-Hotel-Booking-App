@@ -141,7 +141,7 @@ export default function EditMode({
             <div className="mb-2">
               <Button variant="light" className="px-3" onClick={handleShowFile}>
                 <i className="bi bi-upload me-2"></i>
-                Upload Images
+                Upload 5 Images
               </Button>
             </div>
 

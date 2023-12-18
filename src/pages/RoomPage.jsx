@@ -124,7 +124,9 @@ export default function RoomPage() {
   return (
     <>
       {loading ? (
-        <LoadingSpinner />
+        <div className="my-5">
+          <LoadingSpinner />
+        </div>
       ) : (
         <div className="py-4 mx-md-4 px-md-5 mx-1 px-1">
           <h1 className="my-3 ms-3">
