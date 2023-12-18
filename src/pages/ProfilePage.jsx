@@ -6,12 +6,15 @@ import {
   fetchProfileImage,
   updateProfileImage,
 } from "../features/bookings/bookingsSlice";
+import defaultProfileImage from "../assets/defaultProfileImage.png";
 
 export default function ProfilePage() {
   const { currentUser } = useContext(AuthContext);
 
   const dispatch = useDispatch();
   const profileImage = useSelector((state) => state.bookings.profileImage);
+
+  const displayImages = profileImage ? profileImage : defaultProfileImage;
 
   const fileInput = useRef();
 
@@ -36,7 +39,7 @@ export default function ProfilePage() {
         <Row>
           <Col lg={3} className="text-center mb-3">
             <Image
-              src={profileImage || "src/assets/profileImage.png"}
+              src={displayImages}
               style={{
                 width: "200px",
                 height: "200px",

@@ -264,7 +264,11 @@ const bookingsSlice = createSlice({
     profileImage: null,
     roomImages: {},
   },
-  reducers: {},
+  reducers: {
+    resetProfileImage: (state) => {
+      state.profileImage = null;
+    },
+  },
 
   extraReducers: (builder) => {
     //fetchRooms
@@ -386,3 +390,4 @@ const bookingsSlice = createSlice({
 });
 
 export default bookingsSlice.reducer;
+export const { resetProfileImage } = bookingsSlice.actions;

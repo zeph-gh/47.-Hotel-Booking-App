@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchProfileImage,
   fetchRooms,
+  resetProfileImage,
 } from "../features/bookings/bookingsSlice";
 import Footer from "./Footer";
 import defaultProfileImage from "../assets/defaultProfileImage.png";
@@ -24,8 +25,6 @@ export default function TopBottonBar({ editMode, setEditMode }) {
   const { currentUser } = useContext(AuthContext);
 
   const [showModal, setShowModal] = useState(false);
-
-  const [profileImage, setProfileImage] = useState(defaultProfileImage);
 
   const [navExpanded, setNavExpanded] = useState(false);
 
@@ -44,10 +43,10 @@ export default function TopBottonBar({ editMode, setEditMode }) {
 
   const handleLogout = () => {
     auth.signOut();
+    dispatch(resetProfileImage());
     setIsLoggedIn(false);
     navigate("/");
     dispatch(fetchRooms());
-    setProfileImage(defaultProfileImage);
     setNavExpanded(false);
   };
 
@@ -61,9 +60,9 @@ export default function TopBottonBar({ editMode, setEditMode }) {
   };
 
   const dispatch = useDispatch();
-  const profileImageFromRedux = useSelector(
-    (state) => state.bookings.profileImage
-  );
+  const profileImage = useSelector((state) => state.bookings.profileImage);
+
+  const displayImages = profileImage ? profileImage : defaultProfileImage;
 
   const toggleEditMode = () => {
     setEditMode(!editMode);
@@ -72,12 +71,11 @@ export default function TopBottonBar({ editMode, setEditMode }) {
 
   useEffect(() => {
     if (currentUser) {
-      setProfileImage(profileImageFromRedux);
       dispatch(fetchProfileImage(currentUser.uid));
       setNavExpanded(false);
       setShowModal(false);
     }
-  }, [dispatch, currentUser, profileImageFromRedux]);
+  }, [dispatch, currentUser]);
 
   return (
     <>
@@ -118,7 +116,7 @@ export default function TopBottonBar({ editMode, setEditMode }) {
           <i className="bi bi-list fs-3 text-secondary"></i>
 
           <Image
-            src={profileImage}
+            src={displayImages}
             style={{
               width: "38px",
               height: "38px",
@@ -129,7 +127,7 @@ export default function TopBottonBar({ editMode, setEditMode }) {
           />
 
           <Image
-            src={profileImage}
+            src={displayImages}
             style={{
               width: "24px",
               height: "24px",
