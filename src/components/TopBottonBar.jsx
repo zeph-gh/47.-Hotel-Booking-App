@@ -4,6 +4,7 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { AuthContext } from "./AuthProvider";
 import logo from "../assets/logo.png";
+import logoSm from "../assets/logo-sm.png";
 import AuthPage from "../pages/AuthPage";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -86,23 +87,33 @@ export default function TopBottonBar({ editMode, setEditMode }) {
         sticky="top"
         expanded={navExpanded}
         onToggle={setNavExpanded}
-        className="py-3 px-5 border-bottom"
+        className="py-3 pe-4 border-bottom"
       >
         <Navbar.Brand href="/">
-          <img src={logo} height="30px" />
+          <img src={logo} className="d-none d-sm-block ms-5" height="30px" />
+
+          <img src={logoSm} className="d-block d-sm-none ms-3" height="40px" />
         </Navbar.Brand>
 
         {currentUser && currentUser.uid === "j2NA6g3BLgZlLt63kubtbEWSM4g2" ? (
-          <span className="fs-5 fw-medium fst-italic text-primary ms-auto me-2">
-            Admin Account
-          </span>
+          <>
+            <span className="fs-5 fw-medium fst-italic text-primary ms-auto me-2 d-md-block d-none">
+              Admin Account
+            </span>
+            <span className="fs-6 fw-medium fst-italic text-primary ms-auto me-2 d-sm-block d-md-none d-none">
+              Admin Account
+            </span>
+            <span className="fs-6 fw-medium fst-italic text-primary ms-auto me-2 d-block d-sm-none">
+              A.A
+            </span>
+          </>
         ) : (
           ""
         )}
 
         <Navbar.Toggle
           aria-controls="navbar-option"
-          className="px-3 pt-2 pb-0 border border-2 rounded-5"
+          className="px-3 py-2 border border-2 rounded-5 d-flex align-items-center"
         >
           <i className="bi bi-list fs-3 text-secondary"></i>
 
@@ -113,7 +124,18 @@ export default function TopBottonBar({ editMode, setEditMode }) {
               height: "38px",
               objectFit: "cover",
             }}
-            className="ms-1 mb-2"
+            className="ms-1 d-none d-sm-block"
+            roundedCircle
+          />
+
+          <Image
+            src={profileImage}
+            style={{
+              width: "24px",
+              height: "24px",
+              objectFit: "cover",
+            }}
+            className="ms-1 d-block d-sm-none"
             roundedCircle
           />
         </Navbar.Toggle>
@@ -215,7 +237,10 @@ export default function TopBottonBar({ editMode, setEditMode }) {
       {/* --------outlet------------ */}
       <Outlet />
 
-      <Footer handleOpenModal={() => handleOpenModal()} />
+      <Footer
+        currentUser={currentUser}
+        handleOpenModal={() => handleOpenModal()}
+      />
     </>
   );
 }

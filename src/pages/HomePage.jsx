@@ -25,26 +25,49 @@ export default function HomePage({ editMode }) {
           <LoadingSpinner />
         </div>
       ) : (
-        <div className="mx-5 mb-5 p-5">
-          {editMode ? <AddRoom /> : ""}
+        <>
+          <div className="mx-5 mb-5 p-5 d-none d-sm-block">
+            {editMode ? <AddRoom /> : ""}
 
-          {rooms.length > 0 ? (
-            <>
-              <Row>
-                {sortedRooms.map((room) => (
-                  <HomePostCard
-                    key={room.room_id}
-                    room={room}
-                    roomImages={roomImages}
-                    editMode={editMode}
-                  />
-                ))}
-              </Row>
-            </>
-          ) : (
-            ""
-          )}
-        </div>
+            {rooms.length > 0 ? (
+              <>
+                <Row>
+                  {sortedRooms.map((room) => (
+                    <HomePostCard
+                      key={room.room_id}
+                      room={room}
+                      roomImages={roomImages}
+                      editMode={editMode}
+                    />
+                  ))}
+                </Row>
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+
+          <div className="mx-2 p-2 mb-5 d-sm-none">
+            {editMode ? <AddRoom /> : ""}
+
+            {rooms.length > 0 ? (
+              <>
+                <Row>
+                  {sortedRooms.map((room) => (
+                    <HomePostCard
+                      key={room.room_id}
+                      room={room}
+                      roomImages={roomImages}
+                      editMode={editMode}
+                    />
+                  ))}
+                </Row>
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+        </>
       )}
     </>
   );

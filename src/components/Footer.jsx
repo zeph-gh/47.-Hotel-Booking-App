@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Collapse } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-function Footer({ handleOpenModal }) {
+function Footer({ currentUser, handleOpenModal }) {
   const [openHosting, setOpenHosting] = useState(false);
   const [openCorpInfo, setOpenCorpInfo] = useState(false);
   const [openSupport, setOpenSupport] = useState(false);
@@ -210,17 +210,23 @@ function Footer({ handleOpenModal }) {
             </div>
           </Collapse>
 
-          <p className="text-center fw-bold mt-5">NOT A MEMBER YET?</p>
-          <p className="text-center fw-light">Become a member today</p>
-          <Link
-            onClick={(event) => {
-              event.preventDefault();
-              handleOpenModal();
-            }}
-            className="icon fw-bold d-flex justify-content-between align-items-center pb-5"
-          >
-            Join now!<i className="bi bi-arrow-right"></i>
-          </Link>
+          {!currentUser ? (
+            <>
+              <p className="text-center fw-bold mt-5">NOT A MEMBER YET?</p>
+              <p className="text-center fw-light">Become a member today</p>
+              <Link
+                onClick={(event) => {
+                  event.preventDefault();
+                  handleOpenModal();
+                }}
+                className="icon fw-bold d-flex justify-content-between align-items-center pb-5"
+              >
+                Join now!<i className="bi bi-arrow-right"></i>
+              </Link>
+            </>
+          ) : (
+            ""
+          )}
         </div>
 
         <div>
