@@ -67,15 +67,24 @@ export default function AddRoom() {
 
   return (
     <>
-      <div className="shake text-center mb-5">
-        <Button
-          variant="success"
-          className="rounded-4 px-3 py-2"
-          onClick={handleOpenModalAddRoom}
-        >
-          <i className="bi bi-plus-circle text-light"></i>
-          <span className="ms-2 fw-medium">Add Room</span>
-        </Button>
+      <div
+        className="d-flex mt-1"
+        style={{
+          zIndex: "999",
+          position: "fixed",
+          width: "100%",
+        }}
+      >
+        <div className="shake mx-auto">
+          <Button
+            variant="success"
+            className="rounded-4 px-3 py-2"
+            onClick={handleOpenModalAddRoom}
+          >
+            <i className="bi bi-plus-circle text-light"></i>
+            <span className="ms-2 fw-medium">Add Room</span>
+          </Button>
+        </div>
       </div>
 
       <Modal show={showModalAddRoom} onHide={handleCloseModalAddRoom} centered>

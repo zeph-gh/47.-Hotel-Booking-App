@@ -5,6 +5,7 @@ import HomePostCard from "../components/HomePostCard";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { Row } from "react-bootstrap";
 import AddRoom from "../components/AddRoom";
+import BackToTopButton from "../components/BackToTopButton";
 
 export default function HomePage({ editMode }) {
   const loading = useSelector((state) => state.bookings.loading);
@@ -26,12 +27,12 @@ export default function HomePage({ editMode }) {
         </div>
       ) : (
         <>
-          <div className="mx-5 mb-5 p-5 d-none d-sm-block">
+          <div className="mb-5 d-none d-sm-block">
             {editMode ? <AddRoom /> : ""}
 
             {rooms.length > 0 ? (
               <>
-                <Row>
+                <Row className="p-5 mx-5">
                   {sortedRooms.map((room) => (
                     <HomePostCard
                       key={room.room_id}
@@ -47,12 +48,12 @@ export default function HomePage({ editMode }) {
             )}
           </div>
 
-          <div className="mx-2 p-2 mb-5 d-sm-none">
+          <div className="mb-5 d-sm-none" style={{ position: "relative" }}>
             {editMode ? <AddRoom /> : ""}
 
             {rooms.length > 0 ? (
               <>
-                <Row>
+                <Row className="mx-3 p-3 pt-5">
                   {sortedRooms.map((room) => (
                     <HomePostCard
                       key={room.room_id}
@@ -67,6 +68,8 @@ export default function HomePage({ editMode }) {
               ""
             )}
           </div>
+
+          <BackToTopButton />
         </>
       )}
     </>
