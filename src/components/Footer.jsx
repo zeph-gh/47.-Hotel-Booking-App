@@ -97,19 +97,23 @@ function Footer({ currentUser, handleOpenModal }) {
           </a>
         </div>
 
-        <div className="d-none d-lg-block col-md-2">
-          <p className="fw-bold">Not a member yet?</p>
-          <p className="fw-light">Become a member today</p>
-          <Link
-            onClick={(event) => {
-              event.preventDefault();
-              handleOpenModal();
-            }}
-            className="fw-bold text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
-          >
-            Join now!<i className="bi bi-arrow-right"></i>
-          </Link>
-        </div>
+        {!currentUser ? (
+          <div className="d-none d-lg-block col-md-2">
+            <p className="fw-bold">Not a member yet?</p>
+            <p className="fw-light">Become a member today</p>
+            <Link
+              onClick={(event) => {
+                event.preventDefault();
+                handleOpenModal();
+              }}
+              className="fw-bold text-start link-underline link-underline-opacity-0 link-underline-opacity-100-hover link-dark"
+            >
+              Join now!<i className="bi bi-arrow-right"></i>
+            </Link>
+          </div>
+        ) : (
+          ""
+        )}
 
         {/* -------------md-screen-footer---------- */}
 
