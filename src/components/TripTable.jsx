@@ -5,7 +5,12 @@ import { cancelTrip, fetchTrips } from "../features/bookings/bookingsSlice";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-export default function TripTable({ filteredTrips, filter, setFilter }) {
+export default function TripTable({
+  currentUser,
+  filteredTrips,
+  filter,
+  setFilter,
+}) {
   const [isLoadingButton, setIsLoadingButton] = useState(false);
 
   const dispatch = useDispatch();
@@ -21,7 +26,7 @@ export default function TripTable({ filteredTrips, filter, setFilter }) {
       toast.error("Failed to cancel trip.");
     }
     setIsLoadingButton(false);
-    dispatch(fetchTrips());
+    dispatch(fetchTrips(currentUser.uid));
   };
 
   return (

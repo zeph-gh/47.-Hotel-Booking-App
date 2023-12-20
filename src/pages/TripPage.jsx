@@ -41,8 +41,9 @@ export default function TripPage() {
         <div className="my-5">
           <LoadingSpinner />
         </div>
-      ) : filteredTrips.length > 0 ? (
+      ) : filteredTrips ? (
         <TripTable
+          currentUser={currentUser}
           filteredTrips={filteredTrips}
           filter={filter}
           setFilter={setFilter}

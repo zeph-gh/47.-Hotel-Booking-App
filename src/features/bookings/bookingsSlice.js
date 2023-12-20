@@ -336,8 +336,9 @@ const bookingsSlice = createSlice({
     builder.addCase(cancelTrip.fulfilled, (state, action) => {
       // Find the trip with the same id as the cancelled trip
       const index = state.trips.findIndex(
-        (trip) => trip.trip_id === action.payload.booking_id
+        (trip) => trip.trip_id === action.payload
       );
+      console.log(action.payload);
       // Update the trip status to 'cancelled'
       if (index !== -1) {
         state.trips[index].status = "cancelled";
