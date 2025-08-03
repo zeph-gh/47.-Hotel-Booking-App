@@ -1,81 +1,81 @@
-import { useContext, useEffect, useState } from "react";
-import { Navbar, Nav, Modal, Button, Image } from "react-bootstrap";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { AuthContext } from "./AuthProvider";
-import logo from "../assets/logo.png";
-import logoSm from "../assets/logo-sm.png";
-import AuthPage from "../pages/AuthPage";
-import { useDispatch, useSelector } from "react-redux";
+import { useContext, useEffect, useState } from 'react'
+import { Navbar, Nav, Modal, Button, Image } from 'react-bootstrap'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { AuthContext } from './AuthProvider'
+import logo from '../assets/logo.png'
+import logoSm from '../assets/logo-sm.png'
+import AuthPage from '../pages/AuthPage'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   fetchProfileImage,
   fetchRooms,
   resetProfileImage,
-} from "../features/bookings/bookingsSlice";
-import Footer from "./Footer";
-import defaultProfileImage from "../assets/defaultProfileImage.png";
+} from '../features/bookings/bookingsSlice'
+import Footer from './Footer'
+import defaultProfileImage from '../assets/defaultProfileImage.png'
 
 export default function TopBottonBar({ editMode, setEditMode }) {
-  const auth = getAuth();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const auth = getAuth()
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate = useNavigate()
+  const location = useLocation()
 
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext)
 
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false)
 
-  const [navExpanded, setNavExpanded] = useState(false);
+  const [navExpanded, setNavExpanded] = useState(false)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setIsLoggedIn(true);
+        setIsLoggedIn(true)
       } else {
-        setIsLoggedIn(false);
+        setIsLoggedIn(false)
       }
-    });
+    })
 
     // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, [auth]);
+    return () => unsubscribe()
+  }, [auth])
 
   const handleLogout = () => {
-    auth.signOut();
-    dispatch(resetProfileImage());
-    setIsLoggedIn(false);
-    navigate("/");
-    dispatch(fetchRooms());
-    setNavExpanded(false);
-  };
+    auth.signOut()
+    dispatch(resetProfileImage())
+    setIsLoggedIn(false)
+    navigate('/')
+    dispatch(fetchRooms())
+    setNavExpanded(false)
+  }
 
   const handleOpenModal = () => {
-    setShowModal(true);
-  };
+    setShowModal(true)
+  }
 
   // Add a function to close the modal
   const handleCloseModal = () => {
-    setShowModal(false);
-  };
+    setShowModal(false)
+  }
 
-  const dispatch = useDispatch();
-  const profileImage = useSelector((state) => state.bookings.profileImage);
+  const dispatch = useDispatch()
+  const profileImage = useSelector((state) => state.bookings.profileImage)
 
-  const displayImages = profileImage ? profileImage : defaultProfileImage;
+  const displayImages = profileImage ? profileImage : defaultProfileImage
 
   const toggleEditMode = () => {
-    setEditMode(!editMode);
-    setNavExpanded(false);
-  };
+    setEditMode(!editMode)
+    setNavExpanded(false)
+  }
 
   useEffect(() => {
     if (currentUser) {
-      dispatch(fetchProfileImage(currentUser.uid));
-      setNavExpanded(false);
-      setShowModal(false);
+      dispatch(fetchProfileImage(currentUser.uid))
+      setNavExpanded(false)
+      setShowModal(false)
     }
-  }, [dispatch, currentUser]);
+  }, [dispatch, currentUser])
 
   return (
     <>
@@ -93,20 +93,12 @@ export default function TopBottonBar({ editMode, setEditMode }) {
           <img src={logoSm} className="d-block d-sm-none ms-3" height="40px" />
         </Navbar.Brand>
 
-        {currentUser && currentUser.uid === "j2NA6g3BLgZlLt63kubtbEWSM4g2" ? (
+        {currentUser && editMode && (
           <>
-            <span className="fs-5 fw-medium fst-italic text-primary ms-auto me-2 d-md-block d-none">
+            <span className="fs-6 fw-medium fst-italic text-primary ms-auto me-2">
               Admin Account
-            </span>
-            <span className="fs-6 fw-medium fst-italic text-primary ms-auto me-2 d-sm-block d-md-none d-none">
-              Admin Account
-            </span>
-            <span className="fs-6 fw-medium fst-italic text-primary ms-auto me-2 d-block d-sm-none">
-              A.A
             </span>
           </>
-        ) : (
-          ""
         )}
 
         <Navbar.Toggle
@@ -118,9 +110,9 @@ export default function TopBottonBar({ editMode, setEditMode }) {
           <Image
             src={displayImages}
             style={{
-              width: "38px",
-              height: "38px",
-              objectFit: "cover",
+              width: '38px',
+              height: '38px',
+              objectFit: 'cover',
             }}
             className="ms-1 d-none d-sm-block"
             roundedCircle
@@ -129,9 +121,9 @@ export default function TopBottonBar({ editMode, setEditMode }) {
           <Image
             src={displayImages}
             style={{
-              width: "24px",
-              height: "24px",
-              objectFit: "cover",
+              width: '24px',
+              height: '24px',
+              objectFit: 'cover',
             }}
             className="ms-1 d-block d-sm-none"
             roundedCircle
@@ -146,42 +138,35 @@ export default function TopBottonBar({ editMode, setEditMode }) {
                   Welcome, {currentUser.email} {currentUser.phoneNumber}!
                 </p>
               ) : (
-                ""
+                ''
               )}
 
               {isLoggedIn ? (
                 <>
-                  {currentUser &&
-                  currentUser.uid === "j2NA6g3BLgZlLt63kubtbEWSM4g2" &&
-                  location.pathname !== "/admin/bookings" ? (
+                  {currentUser && location.pathname !== '/admin/bookings' && (
                     <Nav.Link
                       as={Link}
                       to="/admin/bookings"
                       onClick={() => setNavExpanded(false)}
                       className="fw-medium text-primary fst-italic"
                     >
-                      Bookings Management
+                      Admin Bookings Management
                     </Nav.Link>
-                  ) : (
-                    ""
                   )}
 
-                  {currentUser &&
-                  currentUser.uid === "j2NA6g3BLgZlLt63kubtbEWSM4g2" ? (
+                  {currentUser && (
                     <Nav.Link
                       className={`fw-medium  fst-italic ${
-                        editMode ? "text-danger" : "text-primary"
+                        editMode ? 'text-danger' : 'text-primary'
                       }`}
                       onClick={toggleEditMode}
                     >
-                      Rooms Management:{" "}
-                      <span>{`${editMode ? "ON" : "OFF"}`}</span>
+                      Admin Rooms Management:{' '}
+                      <span>{`${editMode ? 'ON' : 'OFF'}`}</span>
                     </Nav.Link>
-                  ) : (
-                    ""
                   )}
 
-                  {location.pathname !== "/trips" ? ( // no my trips button when /trips
+                  {location.pathname !== '/trips' ? ( // no my trips button when /trips
                     <Nav.Link
                       as={Link}
                       to="/trips"
@@ -191,7 +176,7 @@ export default function TopBottonBar({ editMode, setEditMode }) {
                     </Nav.Link>
                   ) : null}
 
-                  {location.pathname !== "/profile" ? ( // no my trips button when /trips
+                  {location.pathname !== '/profile' ? ( // no my trips button when /trips
                     <Nav.Link
                       as={Link}
                       to="/profile"
@@ -240,5 +225,5 @@ export default function TopBottonBar({ editMode, setEditMode }) {
         handleOpenModal={() => handleOpenModal()}
       />
     </>
-  );
+  )
 }

@@ -1,30 +1,30 @@
-import { useEffect, useState } from "react";
-import { Nav } from "react-bootstrap";
+import { useEffect, useState } from 'react'
+import { Nav } from 'react-bootstrap'
 
-import LoadingSpinner from "../components/LoadingSpinner";
-import AdminBookingManagementTable from "../components/AdminBookingManagementTable";
-import { fetchBookings } from "../features/bookings/bookingsSlice";
-import { useDispatch } from "react-redux";
+import LoadingSpinner from '../components/LoadingSpinner'
+import AdminBookingManagementTable from '../components/AdminBookingManagementTable'
+import { fetchBookings } from '../features/bookings/bookingsSlice'
+import { useDispatch } from 'react-redux'
 
 export default function AdminBookingManagementPage() {
-  const [filter, setFilter] = useState("cancelled");
-  const [isLoading, setIsLoading] = useState(true);
+  const [filter, setFilter] = useState('confirmed')
+  const [isLoading, setIsLoading] = useState(true)
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    setIsLoading(true);
+    setIsLoading(true)
     dispatch(fetchBookings()).then(() => {
-      setIsLoading(false);
-    });
-  }, [dispatch]);
+      setIsLoading(false)
+    })
+  }, [dispatch])
 
   return (
     <>
       <h1 className="my-4 ms-5">Admin Bookings Managament</h1>
       <Nav
         variant="tabs"
-        defaultActiveKey="cancelled"
+        defaultActiveKey="confirmed"
         justify
         className="mt-5 fw-bold"
       >
@@ -32,7 +32,7 @@ export default function AdminBookingManagementPage() {
           <Nav.Link
             className="custom-nav-link"
             eventKey="confirmed"
-            onClick={() => setFilter("confirmed")}
+            onClick={() => setFilter('confirmed')}
           >
             Confirmed
           </Nav.Link>
@@ -41,7 +41,7 @@ export default function AdminBookingManagementPage() {
           <Nav.Link
             className="custom-nav-link"
             eventKey="cancelled"
-            onClick={() => setFilter("cancelled")}
+            onClick={() => setFilter('cancelled')}
           >
             Cancelled
           </Nav.Link>
@@ -56,5 +56,5 @@ export default function AdminBookingManagementPage() {
         <AdminBookingManagementTable filter={filter} />
       )}
     </>
-  );
+  )
 }

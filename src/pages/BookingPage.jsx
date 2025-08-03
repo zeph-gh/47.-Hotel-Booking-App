@@ -1,40 +1,40 @@
-import { useContext, useState } from "react";
-import { Button, Col, Container, Image, Row } from "react-bootstrap";
-import { useLocation, useNavigate } from "react-router-dom";
-import { AuthContext } from "../components/AuthProvider";
-import { useDispatch } from "react-redux";
+import { useContext, useState } from 'react'
+import { Button, Col, Container, Image, Row } from 'react-bootstrap'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { AuthContext } from '../components/AuthProvider'
+import { useDispatch } from 'react-redux'
 import {
   confirmBooking,
   sendConfirmationEmail,
-} from "../features/bookings/bookingsSlice";
-import LoadingSpinner from "../components/LoadingSpinner";
-import { toast } from "react-toastify";
+} from '../features/bookings/bookingsSlice'
+import LoadingSpinner from '../components/LoadingSpinner'
+import { toast } from 'react-toastify'
 
 export default function BookingPage() {
-  const location = useLocation();
+  const location = useLocation()
   const { room_id, totalPrice, diffDays, checkInDate, checkOutDate, guests } =
-    location.state;
+    location.state
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext)
 
-  const [description, setDescription] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [description, setDescription] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
-  const startDate = new Date(checkInDate);
-  const endDate = new Date(checkOutDate);
+  const startDate = new Date(checkInDate)
+  const endDate = new Date(checkOutDate)
 
   // Format dates
-  const options = { month: "short", day: "numeric", year: "numeric" };
-  const formattedCheckInDate = startDate.toLocaleDateString(undefined, options);
-  const formattedCheckOutDate = endDate.toLocaleDateString(undefined, options);
+  const options = { month: 'short', day: 'numeric', year: 'numeric' }
+  const formattedCheckInDate = startDate.toLocaleDateString(undefined, options)
+  const formattedCheckOutDate = endDate.toLocaleDateString(undefined, options)
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const handleConfirm = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
 
     const bookingData = {
       room_id: room_id,
@@ -42,37 +42,36 @@ export default function BookingPage() {
       booking_date: new Date().toISOString(),
       check_in_date: checkInDate,
       check_out_date: checkOutDate,
-      status: "confirmed",
+      status: 'confirmed',
       description: description,
       phone_number: phoneNumber,
       guests: guests,
       total_price: totalPrice,
       nights: diffDays,
       email: currentUser.email,
-    };
+    }
 
     try {
-      dispatch(confirmBooking(bookingData));
-      toast.success("Booking confirmed!");
+      dispatch(confirmBooking(bookingData))
+      toast.success('Booking confirmed!')
 
       const emailData = {
         to: currentUser.email,
-        subject: "Booking Confirmation",
-        text: "Thank you for your booking! We will remind you 1 day before your trip.",
-      };
+        subject: 'Booking Confirmation',
+        text: 'Thank you for your booking! We will remind you 1 day before your trip.',
+      }
 
-      dispatch(sendConfirmationEmail(emailData));
-      console.log("Email sent successfully");
+      dispatch(sendConfirmationEmail(emailData))
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message)
     }
 
-    setIsLoading(false);
+    setIsLoading(false)
 
-    navigate("/");
-  };
+    navigate('/')
+  }
 
-  const { room_name, room_type, room_location, room_image } = location.state;
+  const { room_name, room_type, room_location, room_image } = location.state
 
   return (
     <Container className="my-4">
@@ -102,7 +101,7 @@ export default function BookingPage() {
               <label>
                 <p>Description:</p>
                 <textarea
-                  style={{ width: "300px" }}
+                  style={{ width: '300px' }}
                   rows="3"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -116,7 +115,7 @@ export default function BookingPage() {
               className="mt-3 border-dark"
               variant="light"
             >
-              {isLoading ? <LoadingSpinner /> : "Confirm"}
+              {isLoading ? <LoadingSpinner /> : 'Confirm'}
             </Button>
           </form>
         </Col>
@@ -144,5 +143,5 @@ export default function BookingPage() {
         </Col>
       </Row>
     </Container>
-  );
+  )
 }

@@ -1,82 +1,101 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   cancelBooking,
   deleteBooking,
   fetchBookings,
   reconfirmBooking,
-} from "../features/bookings/bookingsSlice";
-import LoadingSpinner from "./LoadingSpinner";
-import { Button, Container, Table } from "react-bootstrap";
-import { toast } from "react-toastify";
+  fetchRooms,
+} from '../features/bookings/bookingsSlice'
+import LoadingSpinner from './LoadingSpinner'
+import { Button, Container, Table } from 'react-bootstrap'
+import { toast } from 'react-toastify'
 
 export default function AdminBookingManagementTable({ filter }) {
-  const [isLoadingButton, setIsLoadingButton] = useState(false);
+  const [isLoadingButton, setIsLoadingButton] = useState(false)
 
-  const dispatch = useDispatch();
-  const bookings = useSelector((state) => state.bookings.bookings);
+  const dispatch = useDispatch()
+  const bookings = useSelector((state) => state.bookings.bookings)
+  const rooms = useSelector((state) => state.bookings.rooms)
+
+  useEffect(() => {
+    dispatch(fetchRooms())
+  }, [dispatch])
+
+  // Build a lookup map for room details
+  const roomMap = {}
+  rooms.forEach((room) => {
+    roomMap[room.room_id] = room
+  })
 
   const handleCancel = async (booking_id) => {
-    setIsLoadingButton(true);
-    const action = await dispatch(cancelBooking(booking_id));
+    setIsLoadingButton(true)
+    const action = await dispatch(cancelBooking(booking_id))
 
     if (cancelBooking.fulfilled.match(action)) {
-      toast.success("Success to cancel booking by admin.");
+      toast.success('Success to cancel booking by admin.')
     } else if (cancelBooking.rejected.match(action)) {
-      console.error(action.error);
-      toast.error("Failed to cancel booking by admin.");
+      console.error(action.error)
+      toast.error('Failed to cancel booking by admin.')
     }
-    setIsLoadingButton(false);
-    dispatch(fetchBookings());
-  };
+    setIsLoadingButton(false)
+    dispatch(fetchBookings())
+  }
 
   const handleReconfirm = async (booking_id) => {
-    setIsLoadingButton(true);
-    const action = await dispatch(reconfirmBooking(booking_id));
+    setIsLoadingButton(true)
+    const action = await dispatch(reconfirmBooking(booking_id))
 
     if (reconfirmBooking.fulfilled.match(action)) {
-      toast.success("Success to confirm booking by admin.");
+      toast.success('Success to confirm booking by admin.')
     } else if (reconfirmBooking.rejected.match(action)) {
-      console.error(action.error);
-      toast.error("Failed to confirm booking by admin.");
+      console.error(action.error)
+      toast.error('Failed to confirm booking by admin.')
     }
-    setIsLoadingButton(false);
-    dispatch(fetchBookings());
-  };
+    setIsLoadingButton(false)
+    dispatch(fetchBookings())
+  }
 
   const handleDelete = async (booking_id) => {
-    setIsLoadingButton(true);
-    const action = await dispatch(deleteBooking(booking_id));
+    setIsLoadingButton(true)
+    const action = await dispatch(deleteBooking(booking_id))
 
     if (deleteBooking.fulfilled.match(action)) {
-      toast.success("Success to delete booking by admin.");
+      toast.success('Success to delete booking by admin.')
     } else if (deleteBooking.rejected.match(action)) {
-      console.error(action.error);
-      toast.error("Failed to delete booking by admin.");
+      console.error(action.error)
+      toast.error('Failed to delete booking by admin.')
     }
-    setIsLoadingButton(false);
-    dispatch(fetchBookings()); // re-fetch again for renew table
-  };
+    setIsLoadingButton(false)
+    dispatch(fetchBookings()) // re-fetch again for renew table
+  }
 
-  const sortedAndFilteredBookings =
+  // Merge room details into each booking
+  const mergedBookings =
     bookings.length > 0
       ? [...bookings]
-          // in Redux, the state is immutable, should create a copy of the bookings (...) array before sorting it
+          .map((booking) => ({
+            ...booking,
+            room_name: roomMap[booking.room_id]?.room_name || '',
+            room_type: roomMap[booking.room_id]?.room_type || '',
+            room_location: roomMap[booking.room_id]?.room_location || '',
+            price: roomMap[booking.room_id]?.price || '',
+          }))
           .sort((a, b) => a.booking_id - b.booking_id)
           .filter((booking) => {
-            if (filter === "") return true; // If no filter is set, show all bookings
-            return booking.status === filter; // Otherwise, only show bookings that match the filter
+            if (filter === '') return true
+            return booking.status === filter
           })
-      : [];
+      : []
 
   return (
     <>
-      {sortedAndFilteredBookings.length > 0 ? (
+      {mergedBookings.length > 0 ? (
         <Container className="my-3">
           <Table striped bordered hover responsive>
             <thead>
               <tr>
-                <th>No</th>
+                <th style={{ width: '50px' }}>No</th>
                 <th>Booking Date</th>
                 <th>User ID</th>
                 <th>User Email</th>
@@ -98,75 +117,72 @@ export default function AdminBookingManagementTable({ filter }) {
             </thead>
 
             <tbody>
-              {sortedAndFilteredBookings.map((booking, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
+              {mergedBookings.map((booking, index) => (
+                <tr key={index}>
+                  <td style={{ width: '50px' }}>{index + 1}</td>
+                  <td>
+                    {new Date(booking.booking_date).toLocaleDateString('en-CA')}
+                  </td>
+                  <td>{booking.user_id}</td>
+                  <td>{booking.email}</td>
+                  <td>{booking.room_id}</td>
+                  <td>{booking.room_name}</td>
+                  <td>{booking.room_type}</td>
+                  <td>{booking.room_location}</td>
+                  <td>
+                    {new Date(booking.check_in_date).toLocaleDateString(
+                      'en-CA'
+                    )}
+                  </td>
+                  <td>
+                    {new Date(booking.check_out_date).toLocaleDateString(
+                      'en-CA'
+                    )}
+                  </td>
+                  <td>{booking.price}</td>
+                  <td>{booking.nights}</td>
+                  <td>{booking.total_price}</td>
+                  <td>{booking.guests}</td>
+                  <td>{booking.status}</td>
+                  <td>{booking.description}</td>
+                  <td>{booking.phone_number}</td>
+
+                  {filter === 'confirmed' ? (
                     <td>
-                      {new Date(booking.booking_date).toLocaleDateString(
-                        "en-CA"
-                      )}
+                      <Button
+                        onClick={() => handleCancel(booking.booking_id)}
+                        disabled={isLoadingButton}
+                        className="w-100"
+                        variant="dark"
+                      >
+                        {isLoadingButton ? <LoadingSpinner /> : 'Cancel'}
+                      </Button>
                     </td>
-                    <td>{booking.user_id}</td>
-                    <td>{booking.email}</td>
-                    <td>{booking.room_id}</td>
-                    <td>{booking.room_name}</td>
-                    <td>{booking.room_type}</td>
-                    <td>{booking.room_location}</td>
-                    <td>
-                      {new Date(booking.check_in_date).toLocaleDateString(
-                        "en-CA"
-                      )}
-                    </td>
-                    <td>
-                      {new Date(booking.check_out_date).toLocaleDateString(
-                        "en-CA"
-                      )}
-                    </td>
-                    <td>{booking.price}</td>
-                    <td>{booking.nights}</td>
-                    <td>{booking.total_price}</td>
-                    <td>{booking.guests}</td>
-                    <td>{booking.status}</td>
-                    <td>{booking.description}</td>
-                    <td>{booking.phone_number}</td>
-                    {filter === "confirmed" ? (
+                  ) : (
+                    <>
                       <td>
                         <Button
-                          onClick={() => handleCancel(booking.booking_id)}
+                          onClick={() => handleReconfirm(booking.booking_id)}
                           disabled={isLoadingButton}
                           className="w-100"
-                          variant="dark"
+                          variant="success"
                         >
-                          {isLoadingButton ? <LoadingSpinner /> : "Cancel"}
+                          {isLoadingButton ? <LoadingSpinner /> : 'Confirm'}
+                        </Button>
+
+                        <Button
+                          onClick={() => handleDelete(booking.booking_id)}
+                          disabled={isLoadingButton}
+                          className="w-100 mt-2"
+                          variant="danger"
+                        >
+                          {isLoadingButton ? <LoadingSpinner /> : 'Delete'}
                         </Button>
                       </td>
-                    ) : (
-                      <>
-                        <td>
-                          <Button
-                            onClick={() => handleReconfirm(booking.booking_id)}
-                            disabled={isLoadingButton}
-                            className="w-100"
-                            variant="success"
-                          >
-                            {isLoadingButton ? <LoadingSpinner /> : "Confirm"}
-                          </Button>
-
-                          <Button
-                            onClick={() => handleDelete(booking.booking_id)}
-                            disabled={isLoadingButton}
-                            className="w-100 mt-2"
-                            variant="danger"
-                          >
-                            {isLoadingButton ? <LoadingSpinner /> : "Delete"}
-                          </Button>
-                        </td>
-                      </>
-                    )}
-                  </tr>
-                );
-              })}
+                    </>
+                  )}
+                </tr>
+              ))}
             </tbody>
           </Table>
         </Container>
@@ -176,5 +192,5 @@ export default function AdminBookingManagementTable({ filter }) {
         </div>
       )}
     </>
-  );
+  )
 }

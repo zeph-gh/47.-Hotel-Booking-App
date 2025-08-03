@@ -1,23 +1,24 @@
-import { useDispatch, useSelector } from "react-redux";
-import { fetchRooms } from "../features/bookings/bookingsSlice";
-import { useEffect } from "react";
-import HomePostCard from "../components/HomePostCard";
-import LoadingSpinner from "../components/LoadingSpinner";
-import { Row } from "react-bootstrap";
-import AddRoom from "../components/AddRoom";
-import BackToTopButton from "../components/BackToTopButton";
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchRooms } from '../features/bookings/bookingsSlice'
+import { useEffect } from 'react'
+import HomePostCard from '../components/HomePostCard'
+import LoadingSpinner from '../components/LoadingSpinner'
+import { Row } from 'react-bootstrap'
+import AddRoom from '../components/AddRoom'
+import BackToTopButton from '../components/BackToTopButton'
 
 export default function HomePage({ editMode }) {
-  const loading = useSelector((state) => state.bookings.loading);
-  const rooms = useSelector((state) => state.bookings.rooms);
-  const roomImages = useSelector((state) => state.bookings.roomImages);
-  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.bookings.loading)
+  const rooms = useSelector((state) => state.bookings.rooms)
+  const roomImages = useSelector((state) => state.bookings.roomImages)
+  const dispatch = useDispatch()
 
-  const sortedRooms = [...rooms].sort((a, b) => a.room_id - b.room_id);
+  const sortedRooms = [...rooms].sort((a, b) => a.room_id - b.room_id)
+  console.log('🚀 ~ HomePage ~ sortedRooms:', sortedRooms)
 
   useEffect(() => {
-    dispatch(fetchRooms());
-  }, [dispatch]);
+    dispatch(fetchRooms())
+  }, [dispatch])
 
   return (
     <>
@@ -28,7 +29,7 @@ export default function HomePage({ editMode }) {
       ) : (
         <>
           <div className="mb-5 d-none d-sm-block">
-            {editMode ? <AddRoom /> : ""}
+            {editMode ? <AddRoom /> : ''}
 
             {rooms.length > 0 ? (
               <>
@@ -44,12 +45,12 @@ export default function HomePage({ editMode }) {
                 </Row>
               </>
             ) : (
-              ""
+              ''
             )}
           </div>
 
-          <div className="mb-5 d-sm-none" style={{ position: "relative" }}>
-            {editMode ? <AddRoom /> : ""}
+          <div className="mb-5 d-sm-none" style={{ position: 'relative' }}>
+            {editMode ? <AddRoom /> : ''}
 
             {rooms.length > 0 ? (
               <>
@@ -65,7 +66,7 @@ export default function HomePage({ editMode }) {
                 </Row>
               </>
             ) : (
-              ""
+              ''
             )}
           </div>
 
@@ -73,5 +74,5 @@ export default function HomePage({ editMode }) {
         </>
       )}
     </>
-  );
+  )
 }

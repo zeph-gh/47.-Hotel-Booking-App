@@ -1,44 +1,44 @@
-import { Carousel, Col, Image } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Carousel, Col, Image } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
-import { fetchRoomImages } from "../features/bookings/bookingsSlice";
-import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
-import roomDefaultImages from "./roomDefaultImages";
-import EditMode from "./EditMode";
+import { fetchRoomImages } from '../features/bookings/bookingsSlice'
+import { useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
+import roomDefaultImages from './roomDefaultImages'
+import EditMode from './EditMode'
 
 export default function HomePostCard({ room, roomImages, editMode }) {
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false)
 
   const displayImages = roomImages[room.room_id]
     ? roomImages[room.room_id]
-    : roomDefaultImages;
+    : roomDefaultImages
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const handleOpenModal = () => {
-    setShowModal(true);
-  };
+    setShowModal(true)
+  }
   const handleCloseModal = () => {
-    setShowModal(false);
-  };
+    setShowModal(false)
+  }
 
   useEffect(() => {
-    dispatch(fetchRoomImages(room.room_id));
-  }, [dispatch, room.room_id]);
+    dispatch(fetchRoomImages(room.room_id))
+  }, [dispatch, room.room_id])
 
   return (
     <>
       <Col md={6} xl={4} xxl={3} key={room.room_id} className="mb-5">
         {room.availability ? (
           <>
-            <div style={{ position: "relative" }}>
-              <Carousel interval={3000} style={{ width: "100%" }}>
+            <div style={{ position: 'relative' }}>
+              <Carousel interval={3000} style={{ width: '100%' }}>
                 {displayImages.map((image, index) => (
                   <Carousel.Item key={index}>
                     <Link
                       to={`/room/${room.room_id}`}
-                      style={{ textDecoration: "none", color: "black" }}
+                      style={{ textDecoration: 'none', color: 'black' }}
                     >
                       <Image
                         src={image}
@@ -72,8 +72,8 @@ export default function HomePostCard({ room, roomImages, editMode }) {
           </>
         ) : (
           <div>
-            <div style={{ position: "relative" }}>
-              <Carousel interval={3000} style={{ width: "100%" }}>
+            <div style={{ position: 'relative' }}>
+              <Carousel interval={3000} style={{ width: '100%' }}>
                 {displayImages.map((image, index) => (
                   <Carousel.Item key={index}>
                     <Image
@@ -81,10 +81,10 @@ export default function HomePostCard({ room, roomImages, editMode }) {
                       alt={room.room_name}
                       className="rounded-4"
                       style={{
-                        filter: "grayscale(100%)",
-                        objectFit: "cover",
-                        height: "100%",
-                        width: "100%",
+                        filter: 'grayscale(100%)',
+                        objectFit: 'cover',
+                        height: '100%',
+                        width: '100%',
                       }}
                     />
                   </Carousel.Item>
@@ -93,25 +93,25 @@ export default function HomePostCard({ room, roomImages, editMode }) {
 
               <div
                 style={{
-                  position: "absolute",
+                  position: 'absolute',
                   bottom: 0,
-                  height: "100%",
-                  width: "100%",
+                  height: '100%',
+                  width: '100%',
                   background:
-                    "linear-gradient(to bottom left, #ff385c 30%, transparent 47%)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderTopRightRadius: "15px",
+                    'linear-gradient(to bottom left, #ff385c 30%, transparent 47%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderTopRightRadius: '15px',
                 }}
               >
                 <div
                   className="d-none d-sm-block fs-1"
                   style={{
-                    color: "#ff385c",
+                    color: '#ff385c',
 
-                    fontWeight: "bold",
-                    transform: "rotate(46deg)",
+                    fontWeight: 'bold',
+                    transform: 'rotate(46deg)',
                   }}
                 >
                   Booked
@@ -119,10 +119,10 @@ export default function HomePostCard({ room, roomImages, editMode }) {
                 <div
                   className="d-block d-sm-none fs-6"
                   style={{
-                    color: "#ff385c",
+                    color: '#ff385c',
 
-                    fontWeight: "bold",
-                    transform: "rotate(46deg)",
+                    fontWeight: 'bold',
+                    transform: 'rotate(46deg)',
                   }}
                 >
                   Booked
@@ -149,5 +149,5 @@ export default function HomePostCard({ room, roomImages, editMode }) {
         )}
       </Col>
     </>
-  );
+  )
 }

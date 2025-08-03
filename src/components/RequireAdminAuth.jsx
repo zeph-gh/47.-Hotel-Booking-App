@@ -1,26 +1,26 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../components/AuthProvider";
-import { Button, Modal } from "react-bootstrap";
-import AuthPage from "../pages/AuthPage";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from 'react'
+import { AuthContext } from '../components/AuthProvider'
+import { Button, Modal } from 'react-bootstrap'
+import AuthPage from '../pages/AuthPage'
+import { useNavigate } from 'react-router-dom'
 
 export default function RequireAdminAuth({ children }) {
-  const { currentUser } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const { currentUser } = useContext(AuthContext)
+  const navigate = useNavigate()
 
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false)
   const handleCloseModal = () => {
-    setShowModal(false);
-    navigate("/");
-  };
+    setShowModal(false)
+    navigate('/')
+  }
 
   useEffect(() => {
-    if (!currentUser || currentUser.uid !== "j2NA6g3BLgZlLt63kubtbEWSM4g2") {
-      setShowModal(true);
+    if (!currentUser) {
+      setShowModal(true)
     }
-  }, [currentUser]);
+  }, [currentUser])
 
-  if (!currentUser || currentUser.uid !== "j2NA6g3BLgZlLt63kubtbEWSM4g2") {
+  if (!currentUser) {
     return (
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
@@ -35,8 +35,8 @@ export default function RequireAdminAuth({ children }) {
           </Button>
         </Modal.Footer>
       </Modal>
-    );
+    )
   }
 
-  return children;
+  return children
 }
